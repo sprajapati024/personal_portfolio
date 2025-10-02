@@ -1,0 +1,18 @@
+{
+  "tagline": "Turning tools into automation engines.",
+  "now": {
+    "focus": "Scaling project automation at work",
+    "experiment": "Building expense tracker with iOS Shortcuts",
+    "next": "Integrating SharePoint with Notion dashboards"
+  },
+  "about": {
+    "values": ["Efficiency", "Creativity", "Impact"],
+    "resume": "/resume.pdf",
+    "linkedin": "https://linkedin.com/in/shirin"
+  },
+  "contact": {
+    "email": "mailto:shirin@example.com",
+    "linkedin": "https://linkedin.com/in/shirin",
+    "calendly": "https://calendly.com/shirin"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "changelog": [
+    {
+      "date": "2025-10-02",
+      "note": "Phase 0: Set up foundation, schemas, and sample data"
+    },
+    {
+      "date": "2025-09-28",
+      "note": "Initial project scaffolding with Vite + React + TypeScript"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "projects": [
+    {
+      "slug": "automation-dashboard",
+      "title": "Automation Monitoring Dashboard",
+      "year": 2024,
+      "tools": ["React", "TypeScript", "Node.js", "PostgreSQL"],
+      "impact": {
+        "primary": "Saved 15 hours/week",
+        "metrics": [
+          "Reduced error rate by 45%",
+          "Automated 12 manual processes",
+          "Improved response time by 60%"
+        ]
+      },
+      "overview": {
+        "problem": "Manual tracking of automation jobs was time-consuming and error-prone, leading to delayed responses to failures.",
+        "solution": "Built a real-time dashboard that monitors all automation jobs, sends alerts on failures, and provides detailed analytics.",
+        "outcome": "Team productivity increased significantly with faster issue resolution and proactive monitoring capabilities."
+      },
+      "flow": "graph TD\n    A[Job Triggered] --> B[Execute Automation]\n    B --> C{Success?}\n    C -->|Yes| D[Log Success]\n    C -->|No| E[Send Alert]\n    E --> F[Admin Dashboard]\n    D --> G[Update Metrics]",
+      "media": []
+    },
+    {
+      "slug": "data-migration-tool",
+      "title": "Legacy Data Migration Tool",
+      "year": 2023,
+      "tools": ["Python", "SQL", "AWS", "Docker"],
+      "impact": {
+        "primary": "Migrated 2M+ records",
+        "metrics": [
+          "99.9% data integrity",
+          "Reduced migration time by 70%"
+        ]
+      },
+      "overview": {
+        "problem": "Legacy system needed to migrate millions of records to new database schema without downtime or data loss.",
+        "solution": "Developed incremental migration tool with validation, rollback capabilities, and zero-downtime deployment strategy.",
+        "outcome": "Successfully migrated all data with no business interruption and established reusable migration framework."
+      },
+      "media": []
+    },
+    {
+      "slug": "api-integration-platform",
+      "title": "Multi-API Integration Platform",
+      "year": 2024,
+      "tools": ["Node.js", "Express", "Redis", "GraphQL"],
+      "impact": {
+        "primary": "Unified 8 APIs",
+        "metrics": [
+          "Reduced API calls by 40%",
+          "Improved latency by 55%"
+        ]
+      },
+      "overview": {
+        "problem": "Multiple third-party APIs created complex integration logic scattered across services, causing maintenance nightmares.",
+        "solution": "Created centralized integration platform with caching, rate limiting, and unified GraphQL interface.",
+        "outcome": "Simplified API consumption across all services and dramatically improved performance with intelligent caching."
+      },
+      "flow": "graph TD\n    A[Client Request] --> B[GraphQL Gateway]\n    B --> C{Cache Hit?}\n    C -->|Yes| D[Return Cached]\n    C -->|No| E[Route to API]\n    E --> F[External API]\n    F --> G[Cache Response]\n    G --> H[Return to Client]",
+      "media": []
+    }
+  ]
+}

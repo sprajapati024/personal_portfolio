@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Notion Autofill",
+    "tools": ["Notion", "Zapier", "OpenAI"],
+    "impact": "8h/week saved",
+    "year": 2025,
+    "flow": "graph TD; A[Manual Rollups] --> B[AI Autofill];"
+  },
+  {
+    "title": "Expense Tracker",
+    "tools": ["Notion", "iOS Shortcuts", "API"],
+    "impact": "100% automated daily expense logging",
+    "year": 2025,
+    "flow": "graph TD; A[User Input] --> B[Shortcut] --> C[Notion DB];"
+  }
+]

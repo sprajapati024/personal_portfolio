@@ -1,0 +1,71 @@
+/* Import 98.css for Windows 98 UI components */
+@import '98.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design System Tokens - from design-system.md */
+:root {
+  /* Windows XP Colors */
+  --xp-blue: #0054e3;
+  --xp-blue-light: #4a9eff;
+  --xp-green: #3c8d2f;
+  --xp-taskbar-blue: #245edb;
+  --xp-desktop-blue: #5a7fbe;
+
+  /* Window Chrome */
+  --window-border: #0831d9;
+  --window-title-bg: linear-gradient(180deg, #0997ff 0%, #0053ee 100%);
+  --window-title-inactive: #808080;
+
+  /* Typography */
+  --font-tahoma: 'Tahoma', 'Segoe UI', sans-serif;
+  --font-trebuchet: 'Trebuchet MS', sans-serif;
+
+  /* Spacing (8px grid) */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Border radius */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+
+  /* Shadows */
+  --shadow-window: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-taskbar: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+@layer base {
+  body {
+    @apply bg-win95-teal font-win95 text-win95-base;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: var(--font-tahoma);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Windows XP Desktop Background */
+  body {
+    background: linear-gradient(180deg, #5a7fbe 0%, #3d5a96 100%);
+  }
+
+  /* Reduced Motion Support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

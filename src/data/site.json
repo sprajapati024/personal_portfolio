@@ -1,0 +1,21 @@
+{
+  "tagline": "Turning tools into automation engines.",
+  "now": {
+    "focus": "Scaling project automation at work",
+    "experiment": "Building expense tracker with iOS Shortcuts",
+    "next": "Integrating SharePoint with Notion dashboards"
+  },
+  "about": {
+    "bio": "Automation enthusiast who transforms manual workflows into efficient, scalable solutions. Passionate about building tools that multiply human potential.",
+    "stack": ["React", "TypeScript", "Node.js", "Python", "SQL", "AWS"],
+    "values": ["Efficiency", "Creativity", "Impact"],
+    "resume_url": "https://example.com/resume.pdf",
+    "linkedin_url": "https://linkedin.com/in/shirin"
+  },
+  "contact": {
+    "email": "shirin@example.com",
+    "linkedin": "https://linkedin.com/in/shirin",
+    "calendly": "https://calendly.com/shirin",
+    "subtext": "Prefer async. Share context."
+  }
+}
