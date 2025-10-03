@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { loadSiteData } from '../data/dataLoader';
 import { analytics } from '../utils/analytics';
 
-export const AboutWindow: React.FC = () => {
+interface AboutWindowProps {
+  onOpenWindow?: (windowId: string) => void;
+}
+
+export const AboutWindow: React.FC<AboutWindowProps> = ({ onOpenWindow }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const siteData = loadSiteData();
@@ -94,91 +98,114 @@ export const AboutWindow: React.FC = () => {
 
       {/* Page content - Hannah style */}
       <div
-        className="flex-1 overflow-auto flex items-center justify-center p-8"
+        className="flex-1 overflow-auto flex items-center justify-center p-4"
         style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          background: '#c0c0c0',
         }}
       >
-        <div className="bg-white border-2 shadow-lg max-w-3xl w-full" style={{
+        <div className="bg-white border-2 shadow-lg w-full h-full" style={{
           borderTopColor: '#ffffff',
           borderLeftColor: '#ffffff',
           borderRightColor: '#808080',
           borderBottomColor: '#808080',
         }}>
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col md:flex-row h-full">
             {/* Left side - Text content */}
-            <div className="flex-1 p-8" style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white',
+            <div className="flex-1 p-6 overflow-auto" style={{
+              background: '#c0c0c0',
+              color: '#000000',
             }}>
-              <h1 className="text-3xl font-bold mb-3" style={{ fontFamily: 'var(--font-tahoma)' }}>
+              <h1 className="text-2xl font-bold mb-2" style={{ fontFamily: 'var(--font-tahoma)' }}>
                 hi! i'm {siteData.name.split(' ')[0].toLowerCase()}.
               </h1>
 
-              <h2 className="text-sm uppercase tracking-wider mb-6 opacity-90">
+              <h2 className="text-xs uppercase tracking-wider mb-4" style={{ color: '#000080' }}>
                 {siteData.title}
               </h2>
 
-              <div className="space-y-4 text-sm leading-relaxed">
+              <div className="space-y-3 text-xs leading-relaxed">
                 <p>{siteData.about.bio}</p>
 
                 <p>I especially enjoy working with {siteData.about.stack.slice(0, 3).join(', ')}, and building automation systems.</p>
 
-                <p className="pt-4">
-                  <span className="opacity-90">Currently at </span>
+                <p className="pt-2">
+                  <span>Currently at </span>
                   <a
                     href={siteData.about.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline hover:opacity-80"
+                    className="underline"
+                    style={{ color: '#000080' }}
                   >
                     {siteData.company}
                   </a>
-                  <span className="opacity-90">, {siteData.now.focus.toLowerCase()}.</span>
+                  <span>, {siteData.now.focus.toLowerCase()}.</span>
+                </p>
+
+                <p className="pt-2 font-semibold" style={{ color: '#000080' }}>
+                  Feel free to explore the website and have fun with it!
                 </p>
               </div>
 
               {/* Links */}
-              <div className="mt-8 flex gap-3">
-                <a
-                  href={siteData.about.resume_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => analytics.trackResumeClick()}
-                  className="px-4 py-2 border-2 text-center font-bold text-sm hover:bg-white hover:bg-opacity-10 transition-colors"
-                  style={{
-                    borderColor: 'white',
-                    color: 'white',
-                    textDecoration: 'none',
-                  }}
-                >
-                  Resume
-                </a>
+              <div className="mt-6 flex flex-wrap gap-2">
                 <a
                   href={siteData.about.linkedin_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 border-2 text-center font-bold text-sm hover:bg-white hover:bg-opacity-10 transition-colors"
+                  className="px-3 py-1 border-2 text-center font-bold text-xs hover:bg-gray-300"
                   style={{
-                    borderColor: 'white',
-                    color: 'white',
+                    borderTopColor: '#ffffff',
+                    borderLeftColor: '#ffffff',
+                    borderRightColor: '#808080',
+                    borderBottomColor: '#808080',
+                    backgroundColor: '#c0c0c0',
+                    color: '#000000',
                     textDecoration: 'none',
                   }}
                 >
                   LinkedIn
                 </a>
+                <button
+                  onClick={() => onOpenWindow?.('projects-explorer')}
+                  className="px-3 py-1 border-2 text-center font-bold text-xs hover:bg-gray-300"
+                  style={{
+                    borderTopColor: '#ffffff',
+                    borderLeftColor: '#ffffff',
+                    borderRightColor: '#808080',
+                    borderBottomColor: '#808080',
+                    backgroundColor: '#c0c0c0',
+                    color: '#000000',
+                  }}
+                >
+                  Projects
+                </button>
+                <button
+                  onClick={() => onOpenWindow?.('impact')}
+                  className="px-3 py-1 border-2 text-center font-bold text-xs hover:bg-gray-300"
+                  style={{
+                    borderTopColor: '#ffffff',
+                    borderLeftColor: '#ffffff',
+                    borderRightColor: '#808080',
+                    borderBottomColor: '#808080',
+                    backgroundColor: '#c0c0c0',
+                    color: '#000000',
+                  }}
+                >
+                  Impact
+                </button>
               </div>
             </div>
 
             {/* Right side - Profile photo */}
-            <div className="flex items-center justify-center p-8 bg-white">
+            <div className="flex items-center justify-center p-6 bg-white">
               <img
                 src="/avatar.png"
                 alt={siteData.name}
                 className="rounded-full border-4 border-gray-300 shadow-lg object-cover"
                 style={{
-                  width: '280px',
-                  height: '280px',
+                  width: '200px',
+                  height: '200px',
                 }}
                 onError={(e) => {
                   // Fallback if image doesn't load

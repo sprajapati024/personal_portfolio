@@ -24,48 +24,24 @@ export const NowWindow: React.FC = () => {
     },
   ];
 
-  const getGradient = (color: string) => {
-    switch (color) {
-      case 'blue':
-        return 'linear-gradient(180deg, #e8f4ff 0%, #d0e8ff 100%)';
-      case 'purple':
-        return 'linear-gradient(180deg, #f4e8ff 0%, #e8d0ff 100%)';
-      case 'green':
-        return 'linear-gradient(180deg, #e8ffe8 0%, #d0ffd0 100%)';
-      default:
-        return 'linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%)';
-    }
-  };
-
-  const getTextColor = (color: string) => {
-    switch (color) {
-      case 'blue':
-        return '#1e40af';
-      case 'purple':
-        return '#7c3aed';
-      case 'green':
-        return '#15803d';
-      default:
-        return '#374151';
-    }
-  };
-
   return (
-    <div className="flex flex-col h-full" style={{ fontFamily: 'var(--font-tahoma)' }}>
+    <div className="flex flex-col h-full bg-white p-3" style={{ fontFamily: 'var(--font-tahoma)' }}>
       {/* Header */}
-      <div className="border-b-2 border-gray-400 pb-3 mb-4">
-        <h2 className="text-xl font-bold">What I'm Doing Now</h2>
+      <div className="pb-2 mb-3" style={{
+        borderBottom: '2px solid #0054e3',
+      }}>
+        <h2 className="text-base font-bold" style={{ color: '#000080' }}>What I'm Doing Now</h2>
         <p className="text-xs text-gray-600">Current focus, experiments, and upcoming projects</p>
       </div>
 
       {/* Cards */}
-      <div className="flex-1 overflow-auto space-y-3">
+      <div className="flex-1 overflow-auto space-y-2">
         {cards.map((card) => (
           <div
             key={card.title}
-            className="p-4 border-2"
+            className="p-3 border-2"
             style={{
-              background: getGradient(card.color),
+              backgroundColor: '#ece9d8',
               borderTopColor: '#ffffff',
               borderLeftColor: '#ffffff',
               borderRightColor: '#808080',
@@ -73,15 +49,12 @@ export const NowWindow: React.FC = () => {
             }}
           >
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-2xl">{card.icon}</span>
-              <h3
-                className="font-bold text-lg"
-                style={{ color: getTextColor(card.color) }}
-              >
+              <span className="text-xl">{card.icon}</span>
+              <h3 className="font-bold text-sm" style={{ color: '#000080' }}>
                 {card.title}
               </h3>
             </div>
-            <p className="text-sm text-gray-800 leading-relaxed">
+            <p className="text-xs text-gray-800 leading-relaxed">
               {card.content}
             </p>
           </div>
@@ -89,7 +62,9 @@ export const NowWindow: React.FC = () => {
       </div>
 
       {/* Footer note */}
-      <div className="border-t border-gray-400 mt-3 pt-2 text-xs text-gray-600">
+      <div className="mt-3 pt-2 text-xs text-gray-600" style={{
+        borderTop: '1px solid #808080',
+      }}>
         Updated regularly to reflect current priorities
       </div>
     </div>

@@ -37,7 +37,9 @@ export const Window: React.FC<WindowProps> = ({
   const [size, setSize] = useState({ width, height });
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
+  const [resizeDirection, setResizeDirection] = useState<string>('');
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [initialBounds, setInitialBounds] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const windowRef = useRef<HTMLDivElement>(null);
 
   // Sync external position/size changes
@@ -67,18 +69,42 @@ export const Window: React.FC<WindowProps> = ({
         const deltaX = e.clientX - dragStart.x;
         const deltaY = e.clientY - dragStart.y;
 
-        const newWidth = Math.max(200, size.width + deltaX);
-        const newHeight = Math.max(150, size.height + deltaY);
+        let newX = initialBounds.x;
+        let newY = initialBounds.y;
+        let newWidth = initialBounds.width;
+        let newHeight = initialBounds.height;
 
+        // Handle different resize directions
+        if (resizeDirection.includes('e')) {
+          newWidth = Math.max(200, initialBounds.width + deltaX);
+        }
+        if (resizeDirection.includes('w')) {
+          newWidth = Math.max(200, initialBounds.width - deltaX);
+          if (newWidth > 200) {
+            newX = initialBounds.x + deltaX;
+          }
+        }
+        if (resizeDirection.includes('s')) {
+          newHeight = Math.max(150, initialBounds.height + deltaY);
+        }
+        if (resizeDirection.includes('n')) {
+          newHeight = Math.max(150, initialBounds.height - deltaY);
+          if (newHeight > 150) {
+            newY = Math.max(0, initialBounds.y + deltaY);
+          }
+        }
+
+        setPosition({ x: newX, y: newY });
         setSize({ width: newWidth, height: newHeight });
+        onPositionChange?.(newX, newY);
         onSizeChange?.(newWidth, newHeight);
-        setDragStart({ x: e.clientX, y: e.clientY });
       }
     };
 
     const handleMouseUp = () => {
       setIsDragging(false);
       setIsResizing(false);
+      setResizeDirection('');
     };
 
     if (isDragging || isResizing) {
@@ -90,7 +116,7 @@ export const Window: React.FC<WindowProps> = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, isResizing, dragStart, position, size, isMaximized, onPositionChange, onSizeChange]);
+  }, [isDragging, isResizing, dragStart, position, size, isMaximized, onPositionChange, onSizeChange, resizeDirection, initialBounds]);
 
   const handleTitleBarMouseDown = (e: React.MouseEvent) => {
     if (!isMaximized) {
@@ -100,11 +126,13 @@ export const Window: React.FC<WindowProps> = ({
     onFocus?.();
   };
 
-  const handleResizeMouseDown = (e: React.MouseEvent) => {
+  const handleResizeMouseDown = (direction: string) => (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!isMaximized) {
       setIsResizing(true);
+      setResizeDirection(direction);
       setDragStart({ x: e.clientX, y: e.clientY });
+      setInitialBounds({ x: position.x, y: position.y, width: size.width, height: size.height });
     }
   };
 
@@ -113,7 +141,7 @@ export const Window: React.FC<WindowProps> = ({
     : position;
 
   const effectiveSize = isMaximized
-    ? { width: window.innerWidth, height: window.innerHeight - 32 }
+    ? { width: window.innerWidth, height: window.innerHeight - 40 }
     : size;
 
   return (
@@ -217,16 +245,53 @@ export const Window: React.FC<WindowProps> = ({
         {children}
       </div>
 
-      {/* Resize Handle */}
+      {/* Resize Handles */}
       {!isMaximized && (
-        <div
-          className="absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize"
-          style={{
-            background: 'transparent',
-          }}
-          onMouseDown={handleResizeMouseDown}
-          aria-label="Resize"
-        />
+        <>
+          {/* Corners */}
+          <div
+            className="absolute top-0 left-0 w-2 h-2 cursor-nwse-resize"
+            onMouseDown={handleResizeMouseDown('nw')}
+            aria-label="Resize northwest"
+          />
+          <div
+            className="absolute top-0 right-0 w-2 h-2 cursor-nesw-resize"
+            onMouseDown={handleResizeMouseDown('ne')}
+            aria-label="Resize northeast"
+          />
+          <div
+            className="absolute bottom-0 left-0 w-2 h-2 cursor-nesw-resize"
+            onMouseDown={handleResizeMouseDown('sw')}
+            aria-label="Resize southwest"
+          />
+          <div
+            className="absolute bottom-0 right-0 w-2 h-2 cursor-nwse-resize"
+            onMouseDown={handleResizeMouseDown('se')}
+            aria-label="Resize southeast"
+          />
+
+          {/* Edges */}
+          <div
+            className="absolute top-0 left-2 right-2 h-1 cursor-ns-resize"
+            onMouseDown={handleResizeMouseDown('n')}
+            aria-label="Resize north"
+          />
+          <div
+            className="absolute bottom-0 left-2 right-2 h-1 cursor-ns-resize"
+            onMouseDown={handleResizeMouseDown('s')}
+            aria-label="Resize south"
+          />
+          <div
+            className="absolute left-0 top-2 bottom-2 w-1 cursor-ew-resize"
+            onMouseDown={handleResizeMouseDown('w')}
+            aria-label="Resize west"
+          />
+          <div
+            className="absolute right-0 top-2 bottom-2 w-1 cursor-ew-resize"
+            onMouseDown={handleResizeMouseDown('e')}
+            aria-label="Resize east"
+          />
+        </>
       )}
     </div>
   );

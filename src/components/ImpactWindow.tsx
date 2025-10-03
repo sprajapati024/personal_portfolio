@@ -37,72 +37,77 @@ export const ImpactWindow: React.FC = () => {
     .slice(0, 3);
 
   return (
-    <div className="flex flex-col h-full" style={{ fontFamily: 'var(--font-tahoma)' }}>
+    <div className="flex flex-col h-full bg-white p-3" style={{ fontFamily: 'var(--font-tahoma)' }}>
       {/* Header */}
-      <div className="border-b-2 border-gray-400 pb-3 mb-4">
-        <h2 className="text-xl font-bold">Impact Dashboard</h2>
+      <div className="pb-2 mb-3" style={{
+        borderBottom: '2px solid #0054e3',
+      }}>
+        <h2 className="text-base font-bold" style={{ color: '#000080' }}>Impact Dashboard</h2>
         <p className="text-xs text-gray-600">Automation & efficiency metrics</p>
       </div>
 
       {/* KPI Tiles */}
-      <div className="grid grid-cols-3 gap-3 mb-4">
+      <div className="grid grid-cols-3 gap-2 mb-3">
         {/* Hours Saved */}
         <div
-          className="p-3 border-2 text-center"
+          className="p-2 border-2 text-center"
           style={{
-            background: 'linear-gradient(180deg, #ffffff 0%, #e8f4ff 100%)',
+            backgroundColor: '#ece9d8',
             borderTopColor: '#ffffff',
             borderLeftColor: '#ffffff',
             borderRightColor: '#808080',
             borderBottomColor: '#808080',
           }}
         >
-          <div className="text-3xl font-bold text-blue-700">{totalHoursSaved}+</div>
+          <div className="text-2xl font-bold" style={{ color: '#000080' }}>{totalHoursSaved}+</div>
           <div className="text-xs text-gray-700 mt-1">Hours/Year Saved</div>
         </div>
 
         {/* Time Reduction */}
         <div
-          className="p-3 border-2 text-center"
+          className="p-2 border-2 text-center"
           style={{
-            background: 'linear-gradient(180deg, #ffffff 0%, #fff4e8 100%)',
+            backgroundColor: '#ece9d8',
             borderTopColor: '#ffffff',
             borderLeftColor: '#ffffff',
             borderRightColor: '#808080',
             borderBottomColor: '#808080',
           }}
         >
-          <div className="text-3xl font-bold text-orange-700">{avgTimeReduction}%</div>
+          <div className="text-2xl font-bold" style={{ color: '#000080' }}>{avgTimeReduction}%</div>
           <div className="text-xs text-gray-700 mt-1">Avg Time Reduction</div>
         </div>
 
         {/* Automations */}
         <div
-          className="p-3 border-2 text-center"
+          className="p-2 border-2 text-center"
           style={{
-            background: 'linear-gradient(180deg, #ffffff 0%, #e8ffe8 100%)',
+            backgroundColor: '#ece9d8',
             borderTopColor: '#ffffff',
             borderLeftColor: '#ffffff',
             borderRightColor: '#808080',
             borderBottomColor: '#808080',
           }}
         >
-          <div className="text-3xl font-bold text-green-700">{totalAutomations}+</div>
+          <div className="text-2xl font-bold" style={{ color: '#000080' }}>{totalAutomations}+</div>
           <div className="text-xs text-gray-700 mt-1">Automations Created</div>
         </div>
       </div>
 
       {/* Top 3 Wins */}
       <div className="flex-1 overflow-auto">
-        <h3 className="font-bold text-sm mb-2 border-b border-gray-400 pb-1">
+        <h3 className="font-bold text-sm mb-2 pb-1" style={{
+          borderBottom: '1px solid #808080',
+        }}>
           Top 3 Project Wins
         </h3>
         <div className="space-y-2">
           {top3Projects.map((project, index) => (
             <div
               key={project.slug}
-              className="p-3 border-2 bg-white"
+              className="p-2 border-2"
               style={{
+                backgroundColor: '#ffffff',
                 borderTopColor: '#ffffff',
                 borderLeftColor: '#ffffff',
                 borderRightColor: '#808080',
@@ -110,12 +115,21 @@ export const ImpactWindow: React.FC = () => {
               }}
             >
               <div className="flex items-start gap-2">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+                <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center font-bold text-xs border-2"
+                  style={{
+                    backgroundColor: '#ece9d8',
+                    borderTopColor: '#ffffff',
+                    borderLeftColor: '#ffffff',
+                    borderRightColor: '#808080',
+                    borderBottomColor: '#808080',
+                    color: '#000080',
+                  }}
+                >
                   {index + 1}
                 </div>
-                <div className="flex-1">
-                  <div className="font-bold text-sm mb-1">{project.title}</div>
-                  <div className="text-xs text-blue-700 font-semibold mb-1">
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-xs mb-1">{project.title}</div>
+                  <div className="text-xs mb-1" style={{ color: '#000080', fontWeight: '600' }}>
                     {project.impact.primary}
                   </div>
                   <div className="text-xs text-gray-600">

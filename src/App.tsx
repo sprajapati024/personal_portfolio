@@ -10,7 +10,6 @@ import { ImpactWindow } from './components/ImpactWindow';
 import { NowWindow } from './components/NowWindow';
 import { AboutWindow } from './components/AboutWindow';
 import { ContactWindow } from './components/ContactWindow';
-import { ChangelogWindow } from './components/ChangelogWindow';
 import { useWindowManager } from './hooks/useWindowManager';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import type { DesktopIconProps } from './components/DesktopIcon';
@@ -44,8 +43,8 @@ function App() {
       title: 'About Me.exe',
       x: 50,
       y: 50,
-      width: 500,
-      height: 450,
+      width: 840,
+      height: 600,
       zIndex: 1,
       isMinimized: false,
       isMaximized: false,
@@ -59,7 +58,7 @@ function App() {
       width: 800,
       height: 600,
       zIndex: 4,
-      isMinimized: false,
+      isMinimized: true,
       isMaximized: false,
       visible: true,
     },
@@ -71,7 +70,7 @@ function App() {
       width: 350,
       height: 350,
       zIndex: 3,
-      isMinimized: false,
+      isMinimized: true,
       isMaximized: false,
       visible: true,
     },
@@ -95,18 +94,6 @@ function App() {
       width: 450,
       height: 500,
       zIndex: 6,
-      isMinimized: true,
-      isMaximized: false,
-      visible: true,
-    },
-    {
-      id: 'changelog',
-      title: 'Changelog.exe',
-      x: 400,
-      y: 120,
-      width: 500,
-      height: 400,
-      zIndex: 7,
       isMinimized: true,
       isMaximized: false,
       visible: true,
@@ -200,23 +187,6 @@ function App() {
         }
       },
     },
-    {
-      id: 'changelog',
-      icon: '📝',
-      label: 'Changelog',
-      isSelected: selectedIconId === 'changelog',
-      onClick: (id) => setSelectedIconId(id),
-      onDoubleClick: (id) => {
-        const win = windows.find(w => w.id === id);
-        if (!win?.visible) {
-          reopenWindow(id);
-        } else if (win?.isMinimized) {
-          restoreWindow(id);
-        } else {
-          bringToFront(id);
-        }
-      },
-    },
   ];
 
   const handleWindowClick = (id: string) => {
@@ -269,10 +239,21 @@ function App() {
     },
   });
 
+  const handleOpenWindow = (windowId: string) => {
+    const win = windows.find(w => w.id === windowId);
+    if (!win?.visible) {
+      reopenWindow(windowId);
+    } else if (win?.isMinimized) {
+      restoreWindow(windowId);
+    } else {
+      bringToFront(windowId);
+    }
+  };
+
   const renderWindowContent = (id: string) => {
     switch (id) {
       case 'about':
-        return <AboutWindow />;
+        return <AboutWindow onOpenWindow={handleOpenWindow} />;
       case 'projects-explorer':
         return <ProjectsExplorer />;
       case 'impact':
@@ -281,8 +262,6 @@ function App() {
         return <NowWindow />;
       case 'contact':
         return <ContactWindow />;
-      case 'changelog':
-        return <ChangelogWindow />;
       default:
         return null;
     }

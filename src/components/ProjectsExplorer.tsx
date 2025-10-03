@@ -117,18 +117,30 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
   }
 
   return (
-    <div className="flex flex-col h-full" style={{ fontFamily: 'var(--font-tahoma)' }}>
+    <div className="flex flex-col h-full bg-white p-3" style={{ fontFamily: 'var(--font-tahoma)' }}>
+      {/* Header */}
+      <div className="pb-2 mb-3" style={{
+        borderBottom: '2px solid #0054e3',
+      }}>
+        <h2 className="text-base font-bold" style={{ color: '#000080' }}>Projects Explorer</h2>
+        <p className="text-xs text-gray-600">View and search all projects</p>
+      </div>
+
       {/* Toolbar */}
-      <div className="flex gap-2 mb-2 p-2 bg-gray-100 border-b border-gray-300">
+      <div className="flex gap-2 mb-2 p-2" style={{
+        backgroundColor: '#ece9d8',
+        border: '1px solid #808080',
+      }}>
         {/* Search */}
         <input
           type="text"
           placeholder="Search projects..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="px-2 py-1 border border-gray-400 text-sm flex-1"
+          className="px-2 py-1 border text-xs flex-1"
           style={{
             fontFamily: 'var(--font-tahoma)',
+            borderColor: '#808080',
           }}
         />
 
@@ -136,9 +148,10 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
         <select
           value={filterTool}
           onChange={(e) => setFilterTool(e.target.value)}
-          className="px-2 py-1 border border-gray-400 text-sm"
+          className="px-2 py-1 border text-xs"
           style={{
             fontFamily: 'var(--font-tahoma)',
+            borderColor: '#808080',
           }}
         >
           <option value="">All Tools</option>
@@ -154,13 +167,13 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
               setFilterTool('');
               setSearchQuery('');
             }}
-            className="px-3 py-1 border text-sm"
+            className="px-2 py-1 border text-xs"
             style={{
               background: '#c0c0c0',
               borderTopColor: '#ffffff',
               borderLeftColor: '#ffffff',
-              borderRightColor: '#000000',
-              borderBottomColor: '#000000',
+              borderRightColor: '#808080',
+              borderBottomColor: '#808080',
               fontFamily: 'var(--font-tahoma)',
             }}
           >
@@ -170,28 +183,59 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto">
-        <table className="w-full border-collapse text-sm">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden border-2" style={{
+        borderTopColor: '#808080',
+        borderLeftColor: '#808080',
+        borderRightColor: '#ffffff',
+        borderBottomColor: '#ffffff',
+      }}>
+        <table className="w-full text-xs" style={{
+          tableLayout: 'fixed',
+          borderCollapse: 'collapse',
+          fontFamily: 'Tahoma, sans-serif',
+        }}>
           <thead>
-            <tr className="bg-gray-200 border-b-2 border-gray-400">
+            <tr style={{
+              backgroundColor: '#ece9d8',
+              borderBottom: '2px solid #808080',
+            }}>
               <th
-                className="text-left px-2 py-1 cursor-pointer hover:bg-gray-300"
+                className="text-left px-3 py-2 cursor-pointer font-bold"
                 onClick={() => handleSort('title')}
+                style={{
+                  color: '#000080',
+                  borderRight: '1px solid #d4d0c8',
+                }}
               >
                 Title{getSortIndicator('title')}
               </th>
-              <th className="text-left px-2 py-1">
+              <th
+                className="text-left px-3 py-2 font-bold"
+                style={{
+                  color: '#000080',
+                  width: '180px',
+                  borderRight: '1px solid #d4d0c8',
+                }}
+              >
                 Tools
               </th>
               <th
-                className="text-left px-2 py-1 cursor-pointer hover:bg-gray-300"
+                className="text-left px-3 py-2 cursor-pointer font-bold"
                 onClick={() => handleSort('impact')}
+                style={{
+                  color: '#000080',
+                  borderRight: '1px solid #d4d0c8',
+                }}
               >
                 Impact{getSortIndicator('impact')}
               </th>
               <th
-                className="text-left px-2 py-1 cursor-pointer hover:bg-gray-300"
+                className="text-right px-3 py-2 cursor-pointer font-bold"
                 onClick={() => handleSort('year')}
+                style={{
+                  color: '#000080',
+                  width: '80px',
+                }}
               >
                 Year{getSortIndicator('year')}
               </th>
@@ -201,22 +245,65 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
             {filteredAndSortedProjects.map((project, index) => (
               <tr
                 key={project.slug}
-                className="border-b border-gray-300 hover:bg-blue-100 cursor-pointer"
+                className="cursor-pointer transition-colors"
                 onClick={() => handleRowClick(project)}
                 style={{
-                  background: index % 2 === 0 ? '#ffffff' : '#f0f0f0',
+                  backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9f9f9',
+                  borderBottom: '1px solid #d4d0c8',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#e5f3ff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = index % 2 === 0 ? '#ffffff' : '#f9f9f9';
                 }}
               >
-                <td className="px-2 py-1.5 font-semibold">{project.title}</td>
-                <td className="px-2 py-1.5 text-xs text-gray-700">
-                  {project.tools.slice(0, 3).join(', ')}
-                  {project.tools.length > 3 && ` +${project.tools.length - 3}`}
+                <td
+                  className="px-3 py-3 font-bold align-top"
+                  style={{
+                    color: '#000080',
+                    whiteSpace: 'normal',
+                    wordWrap: 'break-word',
+                    lineHeight: '1.4',
+                    borderRight: '1px solid #e8e8e8',
+                  }}
+                >
+                  {project.title}
                 </td>
-                <td className="px-2 py-1.5 text-xs text-blue-700">
-                  {project.impact.primary.substring(0, 60)}
-                  {project.impact.primary.length > 60 && '...'}
+                <td
+                  className="px-3 py-3 align-top"
+                  style={{
+                    color: '#505050',
+                    whiteSpace: 'normal',
+                    wordWrap: 'break-word',
+                    lineHeight: '1.4',
+                    borderRight: '1px solid #e8e8e8',
+                  }}
+                >
+                  {project.tools.slice(0, 2).join(', ')}
+                  {project.tools.length > 2 && ` +${project.tools.length - 2}`}
                 </td>
-                <td className="px-2 py-1.5">{project.year}</td>
+                <td
+                  className="px-3 py-3 align-top"
+                  style={{
+                    color: '#505050',
+                    whiteSpace: 'normal',
+                    wordWrap: 'break-word',
+                    lineHeight: '1.4',
+                    borderRight: '1px solid #e8e8e8',
+                  }}
+                >
+                  {project.impact.primary}
+                </td>
+                <td
+                  className="px-3 py-3 text-right align-top"
+                  style={{
+                    color: '#000080',
+                    fontWeight: '500',
+                  }}
+                >
+                  {project.year}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -230,7 +317,9 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
       </div>
 
       {/* Footer stats */}
-      <div className="border-t border-gray-400 pt-2 mt-2 text-xs text-gray-600">
+      <div className="pt-2 mt-2 text-xs text-gray-600" style={{
+        borderTop: '1px solid #808080',
+      }}>
         Showing {filteredAndSortedProjects.length} of {projectsData.projects.length} projects
       </div>
     </div>
