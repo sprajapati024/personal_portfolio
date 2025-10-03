@@ -3,24 +3,18 @@ import { loadSiteData } from '../data/dataLoader';
 export const NowWindow: React.FC = () => {
   const siteData = loadSiteData();
 
-  const cards = [
+  const sections = [
     {
-      title: 'Focus',
+      title: 'Current Focus',
       content: siteData.now.focus,
-      icon: '🎯',
-      color: 'blue',
     },
     {
-      title: 'Experiment',
+      title: 'Experimenting With',
       content: siteData.now.experiment,
-      icon: '🧪',
-      color: 'purple',
     },
     {
-      title: 'Next',
+      title: 'Coming Next',
       content: siteData.now.next,
-      icon: '🚀',
-      color: 'green',
     },
   ];
 
@@ -34,35 +28,25 @@ export const NowWindow: React.FC = () => {
         <p className="text-xs text-gray-600">Current focus, experiments, and upcoming projects</p>
       </div>
 
-      {/* Cards */}
-      <div className="flex-1 overflow-auto space-y-2">
-        {cards.map((card) => (
-          <div
-            key={card.title}
-            className="p-3 border-2"
-            style={{
-              backgroundColor: '#ece9d8',
-              borderTopColor: '#ffffff',
-              borderLeftColor: '#ffffff',
-              borderRightColor: '#808080',
-              borderBottomColor: '#808080',
-            }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xl">{card.icon}</span>
-              <h3 className="font-bold text-sm" style={{ color: '#000080' }}>
-                {card.title}
-              </h3>
-            </div>
-            <p className="text-xs text-gray-800 leading-relaxed">
-              {card.content}
+      {/* Content sections */}
+      <div className="flex-1 overflow-auto space-y-3">
+        {sections.map((section) => (
+          <div key={section.title}>
+            <h3 className="font-bold text-xs mb-1 pb-1" style={{
+              color: '#000080',
+              borderBottom: '1px solid #d4d0c8',
+            }}>
+              {section.title}
+            </h3>
+            <p className="text-xs text-gray-800 leading-relaxed pl-2">
+              {section.content}
             </p>
           </div>
         ))}
       </div>
 
       {/* Footer note */}
-      <div className="mt-3 pt-2 text-xs text-gray-600" style={{
+      <div className="mt-3 pt-2 text-xs text-gray-600 text-center" style={{
         borderTop: '1px solid #808080',
       }}>
         Updated regularly to reflect current priorities
