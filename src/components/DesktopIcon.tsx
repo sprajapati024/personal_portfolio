@@ -19,7 +19,7 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
   onClick,
 }) => {
   const [clickCount, setClickCount] = useState(0);
-  const [clickTimer, setClickTimer] = useState<number | null>(null);
+  const [clickTimer, setClickTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent desktop click handler from firing
