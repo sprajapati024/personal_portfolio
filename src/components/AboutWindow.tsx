@@ -92,174 +92,99 @@ export const AboutWindow: React.FC = () => {
         </div>
       </div>
 
-      {/* Page content */}
-      <div className="flex-1 overflow-auto bg-gray-200 p-6">
-        <div className="max-w-2xl mx-auto">
-          {/* Profile section */}
-          <div className="bg-white border-2 border-gray-400 p-6 mb-4" style={{
-            borderTopColor: '#ffffff',
-            borderLeftColor: '#ffffff',
-            borderRightColor: '#808080',
-            borderBottomColor: '#808080',
-          }}>
-            <div className="flex items-start gap-6">
-              {/* Avatar */}
-              <div className="flex-shrink-0">
-                <img
-                  src="/avatar.png"
-                  alt="Avatar"
-                  className="w-32 h-32 border-2 border-gray-400 bg-white"
-                  style={{
-                    borderTopColor: '#808080',
-                    borderLeftColor: '#808080',
-                    borderRightColor: '#ffffff',
-                    borderBottomColor: '#ffffff',
-                  }}
-                />
-              </div>
+      {/* Page content - Hannah style */}
+      <div
+        className="flex-1 overflow-auto flex items-center justify-center p-8"
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        }}
+      >
+        <div className="bg-white border-2 shadow-lg max-w-3xl w-full" style={{
+          borderTopColor: '#ffffff',
+          borderLeftColor: '#ffffff',
+          borderRightColor: '#808080',
+          borderBottomColor: '#808080',
+        }}>
+          <div className="flex flex-col md:flex-row">
+            {/* Left side - Text content */}
+            <div className="flex-1 p-8" style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+            }}>
+              <h1 className="text-3xl font-bold mb-3" style={{ fontFamily: 'var(--font-tahoma)' }}>
+                hi! i'm {siteData.name.split(' ')[0].toLowerCase()}.
+              </h1>
 
-              {/* Info */}
-              <div className="flex-1">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {siteData.name}
-                </h1>
-                <h2 className="text-xl text-blue-700 mb-3">
-                  {siteData.title}
-                </h2>
-                <p className="text-sm text-gray-600 mb-2">
-                  {siteData.company}
+              <h2 className="text-sm uppercase tracking-wider mb-6 opacity-90">
+                {siteData.title}
+              </h2>
+
+              <div className="space-y-4 text-sm leading-relaxed">
+                <p>{siteData.about.bio}</p>
+
+                <p>I especially enjoy working with {siteData.about.stack.slice(0, 3).join(', ')}, and building automation systems.</p>
+
+                <p className="pt-4">
+                  <span className="opacity-90">Currently at </span>
+                  <a
+                    href={siteData.about.linkedin_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:opacity-80"
+                  >
+                    {siteData.company}
+                  </a>
+                  <span className="opacity-90">, {siteData.now.focus.toLowerCase()}.</span>
                 </p>
-                <div className="mt-4 p-3 bg-blue-50 border-l-4 border-blue-500">
-                  <p className="text-sm font-semibold text-blue-900 italic">
-                    "{siteData.tagline}"
-                  </p>
-                </div>
+              </div>
+
+              {/* Links */}
+              <div className="mt-8 flex gap-3">
+                <a
+                  href={siteData.about.resume_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => analytics.trackResumeClick()}
+                  className="px-4 py-2 border-2 text-center font-bold text-sm hover:bg-white hover:bg-opacity-10 transition-colors"
+                  style={{
+                    borderColor: 'white',
+                    color: 'white',
+                    textDecoration: 'none',
+                  }}
+                >
+                  Resume
+                </a>
+                <a
+                  href={siteData.about.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 border-2 text-center font-bold text-sm hover:bg-white hover:bg-opacity-10 transition-colors"
+                  style={{
+                    borderColor: 'white',
+                    color: 'white',
+                    textDecoration: 'none',
+                  }}
+                >
+                  LinkedIn
+                </a>
               </div>
             </div>
-          </div>
 
-          {/* Bio */}
-          <div className="bg-white border-2 border-gray-400 p-5 mb-4" style={{
-            borderTopColor: '#ffffff',
-            borderLeftColor: '#ffffff',
-            borderRightColor: '#808080',
-            borderBottomColor: '#808080',
-          }}>
-            <h3 className="font-bold text-lg mb-3 border-b-2 border-gray-300 pb-2">
-              About Me
-            </h3>
-            <p className="text-sm leading-relaxed text-gray-800">
-              {siteData.about.bio}
-            </p>
-          </div>
-
-          {/* Tech Stack */}
-          <div className="bg-white border-2 border-gray-400 p-5 mb-4" style={{
-            borderTopColor: '#ffffff',
-            borderLeftColor: '#ffffff',
-            borderRightColor: '#808080',
-            borderBottomColor: '#808080',
-          }}>
-            <h3 className="font-bold text-lg mb-3 border-b-2 border-gray-300 pb-2">
-              Tech Stack
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {siteData.about.stack.map((tech) => (
-                <div
-                  key={tech}
-                  className="px-3 py-1.5 border-2 text-sm font-semibold bg-white"
-                  style={{
-                    borderTopColor: '#ffffff',
-                    borderLeftColor: '#ffffff',
-                    borderRightColor: '#808080',
-                    borderBottomColor: '#808080',
-                  }}
-                >
-                  {tech}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Values */}
-          <div className="bg-white border-2 border-gray-400 p-5 mb-4" style={{
-            borderTopColor: '#ffffff',
-            borderLeftColor: '#ffffff',
-            borderRightColor: '#808080',
-            borderBottomColor: '#808080',
-          }}>
-            <h3 className="font-bold text-lg mb-3 border-b-2 border-gray-300 pb-2">
-              Core Values
-            </h3>
-            <div className="flex gap-3">
-              {siteData.about.values.map((value, index) => (
-                <div
-                  key={value}
-                  className="flex-1 p-3 border-2 text-center"
-                  style={{
-                    background: index === 0
-                      ? 'linear-gradient(180deg, #e8f4ff 0%, #d0e8ff 100%)'
-                      : index === 1
-                      ? 'linear-gradient(180deg, #fff4e8 0%, #ffd0d0 100%)'
-                      : 'linear-gradient(180deg, #e8ffe8 0%, #d0ffd0 100%)',
-                    borderTopColor: '#ffffff',
-                    borderLeftColor: '#ffffff',
-                    borderRightColor: '#808080',
-                    borderBottomColor: '#808080',
-                  }}
-                >
-                  <div className="font-bold text-sm">{value}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Links */}
-          <div className="bg-white border-2 border-gray-400 p-5" style={{
-            borderTopColor: '#ffffff',
-            borderLeftColor: '#ffffff',
-            borderRightColor: '#808080',
-            borderBottomColor: '#808080',
-          }}>
-            <h3 className="font-bold text-lg mb-3 border-b-2 border-gray-300 pb-2">
-              Connect
-            </h3>
-            <div className="flex gap-3">
-              <a
-                href={siteData.about.resume_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => analytics.trackResumeClick()}
-                className="flex-1 px-4 py-2 border-2 text-center font-bold text-sm hover:bg-gray-100"
+            {/* Right side - Profile photo */}
+            <div className="flex items-center justify-center p-8 bg-white">
+              <img
+                src="/avatar.png"
+                alt={siteData.name}
+                className="rounded-full border-4 border-gray-300 shadow-lg object-cover"
                 style={{
-                  background: '#c0c0c0',
-                  borderTopColor: '#ffffff',
-                  borderLeftColor: '#ffffff',
-                  borderRightColor: '#000000',
-                  borderBottomColor: '#000000',
-                  textDecoration: 'none',
-                  color: '#000000',
+                  width: '280px',
+                  height: '280px',
                 }}
-              >
-                📄 Resume
-              </a>
-              <a
-                href={siteData.about.linkedin_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 px-4 py-2 border-2 text-center font-bold text-sm hover:bg-gray-100"
-                style={{
-                  background: '#c0c0c0',
-                  borderTopColor: '#ffffff',
-                  borderLeftColor: '#ffffff',
-                  borderRightColor: '#000000',
-                  borderBottomColor: '#000000',
-                  textDecoration: 'none',
-                  color: '#000000',
+                onError={(e) => {
+                  // Fallback if image doesn't load
+                  e.currentTarget.style.display = 'none';
                 }}
-              >
-                💼 LinkedIn
-              </a>
+              />
             </div>
           </div>
         </div>
