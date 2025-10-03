@@ -3,29 +3,32 @@ import { loadProjects } from '../data/dataLoader';
 export const ImpactWindow: React.FC = () => {
   const projectsData = loadProjects();
 
-  // Calculate total hours saved (extract numbers from primary impact)
+  // Calculate total hours saved annually (extract from primary impact and metrics)
   const totalHoursSaved = projectsData.projects.reduce((total, project) => {
-    const match = project.impact.primary.match(/(\d+)\s*hours?/i);
-    return match ? total + parseInt(match[1]) : total;
+    const text = project.impact.primary + ' ' + project.impact.metrics.join(' ');
+    const annualMatch = text.match(/(\d+)\+?\s*hours?\s+(?:annually|per year)/i);
+    if (annualMatch) return total + parseInt(annualMatch[1]);
+
+    const dailyMatch = text.match(/(\d+(?:\.\d+)?)\s*hours?\s+(?:daily|per day)/i);
+    if (dailyMatch) return total + Math.round(parseFloat(dailyMatch[1]) * 250); // workdays
+
+    return total;
   }, 0);
 
-  // Count total automations
-  const totalAutomations = projectsData.projects.reduce((total, project) => {
-    const match = project.impact.primary.match(/(\d+)\s*(?:automations?|processes?)/i);
-    return match ? total + parseInt(match[1]) : total;
-  }, 0);
+  // Count total projects (as "automations created")
+  const totalAutomations = projectsData.projects.length;
 
-  // Calculate average error reduction (extract percentages)
-  const errorReductions = projectsData.projects
+  // Calculate average time reduction percentage
+  const timeReductions = projectsData.projects
     .map(project => {
-      const metrics = project.impact.metrics.join(' ');
-      const match = metrics.match(/(\d+)%\s*error/i);
-      return match ? parseInt(match[1]) : 0;
+      const text = project.impact.primary + ' ' + project.impact.metrics.join(' ');
+      const percentMatch = text.match(/(\d+)%/i);
+      return percentMatch ? parseInt(percentMatch[1]) : 0;
     })
     .filter(val => val > 0);
 
-  const avgErrorReduction = errorReductions.length > 0
-    ? Math.round(errorReductions.reduce((a, b) => a + b, 0) / errorReductions.length)
+  const avgTimeReduction = timeReductions.length > 0
+    ? Math.round(timeReductions.reduce((a, b) => a + b, 0) / timeReductions.length)
     : 0;
 
   // Get top 3 projects by impact
@@ -55,10 +58,10 @@ export const ImpactWindow: React.FC = () => {
           }}
         >
           <div className="text-3xl font-bold text-blue-700">{totalHoursSaved}+</div>
-          <div className="text-xs text-gray-700 mt-1">Hours/Week Saved</div>
+          <div className="text-xs text-gray-700 mt-1">Hours/Year Saved</div>
         </div>
 
-        {/* Error Reduction */}
+        {/* Time Reduction */}
         <div
           className="p-3 border-2 text-center"
           style={{
@@ -69,8 +72,8 @@ export const ImpactWindow: React.FC = () => {
             borderBottomColor: '#808080',
           }}
         >
-          <div className="text-3xl font-bold text-orange-700">{avgErrorReduction}%</div>
-          <div className="text-xs text-gray-700 mt-1">Avg Error Reduction</div>
+          <div className="text-3xl font-bold text-orange-700">{avgTimeReduction}%</div>
+          <div className="text-xs text-gray-700 mt-1">Avg Time Reduction</div>
         </div>
 
         {/* Automations */}

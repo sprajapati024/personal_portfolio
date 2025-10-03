@@ -1,21 +1,23 @@
 {
-  "tagline": "Turning tools into automation engines.",
+  "name": "Shirin Prajapati",
+  "title": "Project Manager",
+  "company": "Provident Energy Management",
+  "tagline": "Project Manager who builds the tools I wish existed",
   "now": {
-    "focus": "Scaling project automation at work",
-    "experiment": "Building expense tracker with iOS Shortcuts",
-    "next": "Integrating SharePoint with Notion dashboards"
+    "focus": "Managing 40+ sub-metering projects at Provident while building the tools to do it better: created a Python API script saving 200+ hours/year, automated payment processing (300+ hours saved annually), and continuously enhancing the custom Notion PM system I built from scratch.",
+    "experiment": "Learning Python for data analysis while literally building this site you're looking at - practicing what I preach about building your own tools!",
+    "next": "Currently maxed out, but always scouting for the next workflow that needs automation"
   },
   "about": {
-    "bio": "Automation enthusiast who transforms manual workflows into efficient, scalable solutions. Passionate about building tools that multiply human potential.",
-    "stack": ["React", "TypeScript", "Node.js", "Python", "SQL", "AWS"],
+    "bio": "Project Manager at Provident Energy Management who doesn't just manage projects - I build the automation tools and systems that make project delivery faster and more efficient. When I see repetitive work, I code a solution.",
+    "stack": ["Excel", "Python", "SQL", "Claude Code", "VSCode", "Github", "Notion"],
     "values": ["Efficiency", "Creativity", "Impact"],
     "resume_url": "https://example.com/resume.pdf",
-    "linkedin_url": "https://linkedin.com/in/shirin"
+    "linkedin_url": "https://www.linkedin.com/in/shirin-prajapati-574b46116/"
   },
   "contact": {
-    "email": "shirin@example.com",
-    "linkedin": "https://linkedin.com/in/shirin",
-    "calendly": "https://calendly.com/shirin",
-    "subtext": "Prefer async. Share context."
+    "email": "shirinprajapati5@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/shirin-prajapati-574b46116/",
+    "subtext": "Always interested in automation challenges - reach out!"
   }
 }

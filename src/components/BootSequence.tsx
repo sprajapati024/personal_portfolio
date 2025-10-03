@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface BootSequenceProps {
   onComplete: () => void;
@@ -7,11 +7,34 @@ interface BootSequenceProps {
 
 export const BootSequence: React.FC<BootSequenceProps> = ({
   onComplete,
-  duration = 2000,
+  duration = 1500,
 }) => {
   const [progress, setProgress] = useState(0);
   const [isSkipped, setIsSkipped] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Play startup sound
+  useEffect(() => {
+    const audio = new Audio('/sounds/startup.mp3');
+    audioRef.current = audio;
+
+    // Attempt to play audio (may be blocked by browser autoplay policy)
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch((error) => {
+        // Autoplay was prevented - this is expected in many browsers
+        console.log('Audio autoplay prevented:', error);
+      });
+    }
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
+
+  // Progress bar animation
   useEffect(() => {
     const interval = 50; // Update every 50ms
     const increment = (interval / duration) * 100;
@@ -34,6 +57,11 @@ export const BootSequence: React.FC<BootSequenceProps> = ({
   const handleSkip = () => {
     if (!isSkipped) {
       setIsSkipped(true);
+      // Stop audio when skipped
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
       onComplete();
     }
   };

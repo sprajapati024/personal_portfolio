@@ -19,7 +19,7 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  // Get all unique tools for filter dropdown
+  // Extract all unique tools
   const allTools = useMemo(() => {
     const toolsSet = new Set<string>();
     projectsData.projects.forEach(project => {
@@ -34,14 +34,12 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
 
     // Apply tool filter
     if (filterTool) {
-      const filtered = filterProjectsByTool(projectsData, filterTool);
-      results = filtered;
+      results = filterProjectsByTool(projectsData, filterTool);
     }
 
     // Apply search
     if (searchQuery) {
-      const searched = searchProjects(projectsData, searchQuery);
-      results = searched;
+      results = searchProjects(projectsData, searchQuery);
     }
 
     // Apply sorting
@@ -104,14 +102,14 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
               background: '#c0c0c0',
               borderTopColor: '#ffffff',
               borderLeftColor: '#ffffff',
-              borderRightColor: '#808080',
-              borderBottomColor: '#808080',
+              borderRightColor: '#000000',
+              borderBottomColor: '#000000',
             }}
           >
-            ← Back to Projects
+            ← Back to List
           </button>
         </div>
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-auto">
           <ProjectDetail project={selectedProject} />
         </div>
       </div>
@@ -161,8 +159,8 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
               background: '#c0c0c0',
               borderTopColor: '#ffffff',
               borderLeftColor: '#ffffff',
-              borderRightColor: '#808080',
-              borderBottomColor: '#808080',
+              borderRightColor: '#000000',
+              borderBottomColor: '#000000',
               fontFamily: 'var(--font-tahoma)',
             }}
           >
@@ -200,45 +198,40 @@ export const ProjectsExplorer: React.FC<ProjectsExplorerProps> = ({ onProjectSel
             </tr>
           </thead>
           <tbody>
-            {filteredAndSortedProjects.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="text-center py-4 text-gray-500">
-                  No projects found
+            {filteredAndSortedProjects.map((project, index) => (
+              <tr
+                key={project.slug}
+                className="border-b border-gray-300 hover:bg-blue-100 cursor-pointer"
+                onClick={() => handleRowClick(project)}
+                style={{
+                  background: index % 2 === 0 ? '#ffffff' : '#f0f0f0',
+                }}
+              >
+                <td className="px-2 py-1.5 font-semibold">{project.title}</td>
+                <td className="px-2 py-1.5 text-xs text-gray-700">
+                  {project.tools.slice(0, 3).join(', ')}
+                  {project.tools.length > 3 && ` +${project.tools.length - 3}`}
                 </td>
+                <td className="px-2 py-1.5 text-xs text-blue-700">
+                  {project.impact.primary.substring(0, 60)}
+                  {project.impact.primary.length > 60 && '...'}
+                </td>
+                <td className="px-2 py-1.5">{project.year}</td>
               </tr>
-            ) : (
-              filteredAndSortedProjects.map((project) => (
-                <tr
-                  key={project.slug}
-                  className="border-b border-gray-300 hover:bg-blue-50 cursor-pointer"
-                  onClick={() => handleRowClick(project)}
-                >
-                  <td className="px-2 py-2 font-semibold">{project.title}</td>
-                  <td className="px-2 py-2">
-                    <div className="flex flex-wrap gap-1">
-                      {project.tools.map((tool) => (
-                        <span
-                          key={tool}
-                          className="px-1.5 py-0.5 bg-gray-200 text-xs rounded"
-                        >
-                          {tool}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-2 py-2">{project.impact.primary}</td>
-                  <td className="px-2 py-2">{project.year}</td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
+
+        {filteredAndSortedProjects.length === 0 && (
+          <div className="text-center py-8 text-gray-600">
+            No projects found matching your criteria.
+          </div>
+        )}
       </div>
 
-      {/* Status bar */}
-      <div className="border-t border-gray-400 px-2 py-1 bg-gray-100 text-xs text-gray-600">
-        {filteredAndSortedProjects.length} project{filteredAndSortedProjects.length !== 1 ? 's' : ''}
-        {(filterTool || searchQuery) && ` (filtered from ${projectsData.projects.length})`}
+      {/* Footer stats */}
+      <div className="border-t border-gray-400 pt-2 mt-2 text-xs text-gray-600">
+        Showing {filteredAndSortedProjects.length} of {projectsData.projects.length} projects
       </div>
     </div>
   );

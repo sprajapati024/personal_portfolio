@@ -1,3 +1,5 @@
+import { loadSiteData } from '../data/dataLoader';
+
 interface StartMenuPopupProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,6 +19,8 @@ export const StartMenuPopup: React.FC<StartMenuPopupProps> = ({
   onItemClick,
 }) => {
   if (!isOpen) return null;
+
+  const siteData = loadSiteData();
 
   const menuItems: MenuItem[] = [
     { id: 'projects-explorer', label: 'Projects', icon: '📁' },
@@ -53,24 +57,25 @@ export const StartMenuPopup: React.FC<StartMenuPopupProps> = ({
           fontFamily: 'var(--font-tahoma)',
         }}
       >
-        {/* Sidebar */}
+        {/* Personal Info Header */}
         <div
-          className="flex"
+          className="flex flex-col justify-center px-4 py-3"
           style={{
             background: 'linear-gradient(90deg, #245edb 0%, #1941a5 100%)',
-            padding: '8px',
             borderBottom: '1px solid #808080',
+            minHeight: '80px',
           }}
         >
-          <div
-            className="text-white font-bold text-lg transform -rotate-90 origin-bottom-left"
-            style={{
-              writingMode: 'vertical-rl',
-              textOrientation: 'mixed',
-              paddingLeft: '8px',
-            }}
-          >
-            Windows XP
+          <div className="text-white">
+            <div className="font-bold text-base mb-0.5" style={{ fontFamily: 'var(--font-tahoma)' }}>
+              {siteData.name}
+            </div>
+            <div className="text-xs opacity-90" style={{ fontFamily: 'var(--font-tahoma)' }}>
+              {siteData.title}
+            </div>
+            <div className="text-xs opacity-80" style={{ fontFamily: 'var(--font-tahoma)' }}>
+              {siteData.company}
+            </div>
           </div>
         </div>
 

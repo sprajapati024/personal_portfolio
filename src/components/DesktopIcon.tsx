@@ -5,6 +5,7 @@ export interface DesktopIconProps {
   id: string;
   icon: string; // Emoji or image URL
   label: string;
+  isSelected?: boolean;
   onDoubleClick: (id: string) => void;
   onClick?: (id: string) => void;
 }
@@ -13,15 +14,15 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
   id,
   icon,
   label,
+  isSelected = false,
   onDoubleClick,
   onClick,
 }) => {
-  const [isSelected, setIsSelected] = useState(false);
   const [clickCount, setClickCount] = useState(0);
   const [clickTimer, setClickTimer] = useState<number | null>(null);
 
-  const handleClick = () => {
-    setIsSelected(true);
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent desktop click handler from firing
     onClick?.(id);
 
     // Handle double-click detection

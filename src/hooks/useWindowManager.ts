@@ -17,6 +17,7 @@ export interface UseWindowManagerResult {
   windows: WindowState[];
   openWindow: (window: Omit<WindowState, 'zIndex' | 'isMinimized' | 'isMaximized'>) => void;
   closeWindow: (id: string) => void;
+  reopenWindow: (id: string) => void;
   minimizeWindow: (id: string) => void;
   maximizeWindow: (id: string) => void;
   restoreWindow: (id: string) => void;
@@ -53,6 +54,21 @@ export const useWindowManager = (
   const closeWindow = useCallback((id: string) => {
     setWindows((prev) => prev.map((w) => (w.id === id ? { ...w, visible: false } : w)));
   }, []);
+
+  const reopenWindow = useCallback(
+    (id: string) => {
+      const newZIndex = maxZIndex + 1;
+      setMaxZIndex(newZIndex);
+      setWindows((prev) =>
+        prev.map((w) =>
+          w.id === id
+            ? { ...w, visible: true, isMinimized: false, zIndex: newZIndex }
+            : w
+        )
+      );
+    },
+    [maxZIndex]
+  );
 
   const minimizeWindow = useCallback((id: string) => {
     setWindows((prev) =>
@@ -118,6 +134,7 @@ export const useWindowManager = (
     windows,
     openWindow,
     closeWindow,
+    reopenWindow,
     minimizeWindow,
     maximizeWindow,
     restoreWindow,

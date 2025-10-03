@@ -58,7 +58,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
               {project.tools.map((tool) => (
                 <div
                   key={tool}
-                  className="px-3 py-2 border-2 bg-gray-50"
+                  className="px-3 py-2 border-2 bg-white"
                   style={{
                     borderTopColor: '#ffffff',
                     borderLeftColor: '#ffffff',

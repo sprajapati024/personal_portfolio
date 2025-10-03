@@ -25,6 +25,9 @@ export const ProjectSchema = z.object({
 
 // Site data schema based on site.json structure
 export const SiteSchema = z.object({
+  name: z.string(),
+  title: z.string(),
+  company: z.string(),
   tagline: z.string(),
   now: z.object({
     focus: z.string(),

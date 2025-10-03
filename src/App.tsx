@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { LoginSplash } from './components/LoginSplash';
 import { BootSequence } from './components/BootSequence';
 import { Desktop } from './components/Desktop';
 import { Window } from './components/Window';
 import { Taskbar } from './components/Taskbar';
 import { PopmeltBadge } from './components/PopmeltBadge';
-import { Projects, Project } from './components/sections/Projects';
 import { ContactInfo } from './components/sections/Contact';
 import { ProjectsExplorer } from './components/ProjectsExplorer';
 import { ImpactWindow } from './components/ImpactWindow';
@@ -21,46 +19,19 @@ import type { DesktopIconProps } from './components/DesktopIcon';
 export interface PortfolioData {
   name: string
   bio: string
-  projects: Project[]
   contact: ContactInfo
 }
 
-// Default sample data
-const defaultData: PortfolioData = {
-  name: 'John Doe',
-  bio: 'Welcome to my retro portfolio!\n\nI\'m a full-stack developer with a passion for creating nostalgic user experiences. I love combining modern tech with classic design aesthetics.\n\nSkills: React, TypeScript, Node.js, and a deep appreciation for Windows 95.',
-  projects: [
-    {
-      title: 'Retro Chat App',
-      description: 'A real-time chat application styled like AOL Instant Messenger',
-      tech: ['React', 'WebSocket', 'Node.js'],
-    },
-    {
-      title: 'Pixel Art Studio',
-      description: 'Browser-based pixel art editor with MS Paint vibes',
-      tech: ['Canvas API', 'TypeScript', 'IndexedDB'],
-    },
-    {
-      title: 'Synthwave Player',
-      description: 'Music player with WinAmp-inspired interface',
-      tech: ['Web Audio API', 'React', 'TailwindCSS'],
-    },
-  ],
-  contact: {
-    email: 'john.doe@email.com',
-    github: 'https://github.com/johndoe',
-    linkedin: 'https://linkedin.com/in/johndoe',
-  },
-}
+type AppStage = 'boot' | 'desktop';
 
-type AppStage = 'login' | 'boot' | 'desktop';
-
-function App({ data = defaultData }: { data?: PortfolioData }) {
-  const [stage, setStage] = useState<AppStage>('login');
+function App() {
+  const [stage, setStage] = useState<AppStage>('boot');
+  const [selectedIconId, setSelectedIconId] = useState<string | null>(null);
 
   const {
     windows,
     closeWindow,
+    reopenWindow,
     minimizeWindow,
     maximizeWindow,
     restoreWindow,
@@ -73,22 +44,10 @@ function App({ data = defaultData }: { data?: PortfolioData }) {
       title: 'About Me.exe',
       x: 50,
       y: 50,
-      width: 400,
-      height: 300,
+      width: 500,
+      height: 450,
       zIndex: 1,
       isMinimized: false,
-      isMaximized: false,
-      visible: true,
-    },
-    {
-      id: 'projects-old',
-      title: 'Old Projects.exe',
-      x: 400,
-      y: 100,
-      width: 500,
-      height: 400,
-      zIndex: 2,
-      isMinimized: true,
       isMaximized: false,
       visible: true,
     },
@@ -97,8 +56,8 @@ function App({ data = defaultData }: { data?: PortfolioData }) {
       title: 'Projects Explorer.exe',
       x: 100,
       y: 80,
-      width: 700,
-      height: 500,
+      width: 800,
+      height: 600,
       zIndex: 4,
       isMinimized: false,
       isMaximized: false,
@@ -112,7 +71,7 @@ function App({ data = defaultData }: { data?: PortfolioData }) {
       width: 350,
       height: 350,
       zIndex: 3,
-      isMinimized: true,
+      isMinimized: false,
       isMaximized: false,
       visible: true,
     },
@@ -160,70 +119,115 @@ function App({ data = defaultData }: { data?: PortfolioData }) {
       id: 'projects-explorer',
       icon: '📁',
       label: 'Projects',
+      isSelected: selectedIconId === 'projects-explorer',
+      onClick: (id) => setSelectedIconId(id),
       onDoubleClick: (id) => {
         const win = windows.find(w => w.id === id);
-        if (win?.isMinimized) restoreWindow(id);
-        bringToFront(id);
+        if (!win?.visible) {
+          reopenWindow(id);
+        } else if (win?.isMinimized) {
+          restoreWindow(id);
+        } else {
+          bringToFront(id);
+        }
       },
     },
     {
       id: 'about',
       icon: '👤',
       label: 'About',
+      isSelected: selectedIconId === 'about',
+      onClick: (id) => setSelectedIconId(id),
       onDoubleClick: (id) => {
         const win = windows.find(w => w.id === id);
-        if (win?.isMinimized) restoreWindow(id);
-        bringToFront(id);
+        if (!win?.visible) {
+          reopenWindow(id);
+        } else if (win?.isMinimized) {
+          restoreWindow(id);
+        } else {
+          bringToFront(id);
+        }
       },
     },
     {
       id: 'impact',
       icon: '📊',
       label: 'Impact',
+      isSelected: selectedIconId === 'impact',
+      onClick: (id) => setSelectedIconId(id),
       onDoubleClick: (id) => {
         const win = windows.find(w => w.id === id);
-        if (win?.isMinimized) restoreWindow(id);
-        bringToFront(id);
+        if (!win?.visible) {
+          reopenWindow(id);
+        } else if (win?.isMinimized) {
+          restoreWindow(id);
+        } else {
+          bringToFront(id);
+        }
       },
     },
     {
       id: 'now',
       icon: '🎯',
       label: 'Now',
+      isSelected: selectedIconId === 'now',
+      onClick: (id) => setSelectedIconId(id),
       onDoubleClick: (id) => {
         const win = windows.find(w => w.id === id);
-        if (win?.isMinimized) restoreWindow(id);
-        bringToFront(id);
+        if (!win?.visible) {
+          reopenWindow(id);
+        } else if (win?.isMinimized) {
+          restoreWindow(id);
+        } else {
+          bringToFront(id);
+        }
       },
     },
     {
       id: 'contact',
       icon: '📧',
       label: 'Contact',
+      isSelected: selectedIconId === 'contact',
+      onClick: (id) => setSelectedIconId(id),
       onDoubleClick: (id) => {
         const win = windows.find(w => w.id === id);
-        if (win?.isMinimized) restoreWindow(id);
-        bringToFront(id);
+        if (!win?.visible) {
+          reopenWindow(id);
+        } else if (win?.isMinimized) {
+          restoreWindow(id);
+        } else {
+          bringToFront(id);
+        }
       },
     },
     {
       id: 'changelog',
       icon: '📝',
       label: 'Changelog',
+      isSelected: selectedIconId === 'changelog',
+      onClick: (id) => setSelectedIconId(id),
       onDoubleClick: (id) => {
         const win = windows.find(w => w.id === id);
-        if (win?.isMinimized) restoreWindow(id);
-        bringToFront(id);
+        if (!win?.visible) {
+          reopenWindow(id);
+        } else if (win?.isMinimized) {
+          restoreWindow(id);
+        } else {
+          bringToFront(id);
+        }
       },
     },
   ];
 
   const handleWindowClick = (id: string) => {
     const win = windows.find(w => w.id === id);
-    if (win?.isMinimized) {
+    if (!win?.visible) {
+      reopenWindow(id);
+    } else if (win?.isMinimized) {
       restoreWindow(id);
+    } else {
+      bringToFront(id);
     }
-    bringToFront(id);
   };
 
   const handleWindowMaximize = (id: string) => {
@@ -269,8 +273,6 @@ function App({ data = defaultData }: { data?: PortfolioData }) {
     switch (id) {
       case 'about':
         return <AboutWindow />;
-      case 'projects-old':
-        return <Projects projects={data.projects} />;
       case 'projects-explorer':
         return <ProjectsExplorer />;
       case 'impact':
@@ -286,11 +288,6 @@ function App({ data = defaultData }: { data?: PortfolioData }) {
     }
   };
 
-  // Login splash screen
-  if (stage === 'login') {
-    return <LoginSplash onComplete={() => setStage('boot')} />;
-  }
-
   // Boot sequence
   if (stage === 'boot') {
     return <BootSequence onComplete={() => setStage('desktop')} />;
@@ -298,7 +295,10 @@ function App({ data = defaultData }: { data?: PortfolioData }) {
 
   // Desktop
   return (
-    <Desktop icons={desktopIcons}>
+    <Desktop
+      icons={desktopIcons}
+      onDesktopClick={() => setSelectedIconId(null)}
+    >
       {windows.map(
         (win) =>
           win.visible && !win.isMinimized && (
@@ -323,12 +323,14 @@ function App({ data = defaultData }: { data?: PortfolioData }) {
           )
       )}
       <Taskbar
-        windows={windows.map(w => ({
-          id: w.id,
-          title: w.title,
-          isActive: w.zIndex === Math.max(...windows.map(win => win.zIndex)),
-          isMinimized: w.isMinimized,
-        }))}
+        windows={windows
+          .filter(w => w.visible)
+          .map(w => ({
+            id: w.id,
+            title: w.title,
+            isActive: w.zIndex === Math.max(...windows.map(win => win.zIndex)),
+            isMinimized: w.isMinimized,
+          }))}
         onWindowClick={handleWindowClick}
         onStartMenuItemClick={handleWindowClick}
       />

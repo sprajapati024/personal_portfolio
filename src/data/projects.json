@@ -1,64 +1,99 @@
 {
   "projects": [
     {
-      "slug": "automation-dashboard",
-      "title": "Automation Monitoring Dashboard",
-      "year": 2024,
-      "tools": ["React", "TypeScript", "Node.js", "PostgreSQL"],
+      "slug": "notion-pm-system",
+      "title": "Notion Project Management System",
+      "year": 2025,
+      "tools": ["Notion", "Notion Automations", "Buttons", "Relations", "Timeline Views"],
       "impact": {
-        "primary": "Saved 15 hours/week",
+        "primary": "Reduced intake-to-handoff time by 80-90% (from 3-5 minutes to 15-30 seconds)",
         "metrics": [
-          "Reduced error rate by 45%",
-          "Automated 12 manual processes",
-          "Improved response time by 60%"
+          "Cut manual fields per intake by 70% (from 8-12 to 2-3)",
+          "Automatic task creation at key milestones",
+          "Auto-duplication of awarded projects with owner carryover"
         ]
       },
       "overview": {
-        "problem": "Manual tracking of automation jobs was time-consuming and error-prone, leading to delayed responses to failures.",
-        "solution": "Built a real-time dashboard that monitors all automation jobs, sends alerts on failures, and provides detailed analytics.",
-        "outcome": "Team productivity increased significantly with faster issue resolution and proactive monitoring capabilities."
-      },
-      "flow": "graph TD\n    A[Job Triggered] --> B[Execute Automation]\n    B --> C{Success?}\n    C -->|Yes| D[Log Success]\n    C -->|No| E[Send Alert]\n    E --> F[Admin Dashboard]\n    D --> G[Update Metrics]",
-      "media": []
+        "problem": "Project intake, assignment, and milestone tracking required repetitive manual edits and copy-paste across multiple pages, leading to inconsistent data and missed follow-ups.",
+        "solution": "Built from scratch a custom Notion PM system with status-driven automations: intake triage, PM assignment, auto-date stamping on milestones, auto-creation of tasks and checkpoint records, and one-click duplication of awarded retrofit leads into the Projects DB.",
+        "outcome": "Faster handoffs, standardized schema for reporting, and reliable accountability via automatic notifications and timeline-based visibility. Now managing 40+ projects seamlessly."
+      }
     },
     {
-      "slug": "data-migration-tool",
-      "title": "Legacy Data Migration Tool",
+      "slug": "meterconnex-notion-sync",
+      "title": "MeterConnex-Notion API Integration",
+      "year": 2025,
+      "tools": ["Python", "Notion API", "MeterConnex API", "Scheduling"],
+      "impact": {
+        "primary": "Saved 200+ hours annually by automating data sync between systems",
+        "metrics": [
+          "Auto-syncs 189 projects per weekly run",
+          "Automatically finds and updates projects missing MCX Site IDs",
+          "Unified portfolio dashboards for centralized visibility"
+        ]
+      },
+      "overview": {
+        "problem": "Disconnected data across MeterConnex and Notion caused fragmentation, manual lookups, and duplicated updates across systems.",
+        "solution": "Built complete API integration: designed system architecture for syncing MCX data into Notion, then implemented Python scripts scheduled weekly to scan, update, and maintain data consistency across 189+ projects.",
+        "outcome": "Eliminated hours of weekly manual data entry, consistent cross-system data quality, and real-time portfolio dashboards powered by automated synchronization."
+      }
+    },
+    {
+      "slug": "payment-processing-automation",
+      "title": "Automated Payment Processing",
+      "year": 2025,
+      "tools": ["Python", "File I/O", "CSV", "Batch Generators", "Reconciliation Logic"],
+      "impact": {
+        "primary": "Reduced daily reconciliation from 2.5 hours to 14 seconds (300+ hours saved annually)",
+        "metrics": [
+          "Processes transactions across 14 financial institutions",
+          "Generates audit-ready batch files with run logs",
+          "99%+ time reduction per run"
+        ]
+      },
+      "overview": {
+        "problem": "Finance teams manually split transactions by bank, reconcile control reports to bank statements, and prepare Cogsdale batch files — a long, error-prone process taking 2.5 hours daily.",
+        "solution": "Python engine that ingests raw transactions, reconciles totals with control reports and bank statements, and outputs per-bank batch files aligned to Cogsdale requirements with full run summaries and logging.",
+        "outcome": "Orders-of-magnitude faster processing (14 seconds vs 2.5 hours) with documented, repeatable reconciliation. Runs daily Mon-Fri, saving 300+ hours annually."
+      }
+    },
+    {
+      "slug": "mdms-validation-system",
+      "title": "Meter Data Validation System",
+      "year": 2025,
+      "tools": ["Python", "FastAPI", "SQLAlchemy", "Pandas", "SQLite", "WebSockets", "YAML"],
+      "impact": {
+        "primary": "Proactively flags data availability and communication issues across 5 meter groups (currently piloting)",
+        "metrics": [
+          "Categorizes results into events, rechecks, flags, and actions",
+          "Scheduled checks per meter group with automated rechecks",
+          "Reduces billing errors and reactive service calls"
+        ]
+      },
+      "overview": {
+        "problem": "Missing or late meter data creates downstream billing errors and reactive service tickets; no systematic, proactive anomaly detection existed.",
+        "solution": "Built a Python-based MDMS service with APIs and scheduled checks that flag anomalies by rule set, rechecks to confirm issues, and routes outcomes to teams for action.",
+        "outcome": "Clear path from POC to pilot with defined environment, schedule, and reporting surfaces; positions operations to catch issues before billing cycles. Pilot currently underway."
+      }
+    },
+    {
+      "slug": "notion-origin-story",
+      "title": "Notion System - From Personal Tool to Company Standard",
       "year": 2023,
-      "tools": ["Python", "SQL", "AWS", "Docker"],
+      "tools": ["Notion", "Project Management", "Process Design"],
       "impact": {
-        "primary": "Migrated 2M+ records",
+        "primary": "Evaluated Monday.com, ClickUp, and Notion - built custom solution now managing 40+ company projects",
         "metrics": [
-          "99.9% data integrity",
-          "Reduced migration time by 70%"
+          "Started with basic tasks/projects, evolved to meeting notes and contacts",
+          "Transformed from personal tool to company-wide system",
+          "Continuously enhanced over 2 years"
         ]
       },
       "overview": {
-        "problem": "Legacy system needed to migrate millions of records to new database schema without downtime or data loss.",
-        "solution": "Developed incremental migration tool with validation, rollback capabilities, and zero-downtime deployment strategy.",
-        "outcome": "Successfully migrated all data with no business interruption and established reusable migration framework."
-      },
-      "media": []
-    },
-    {
-      "slug": "api-integration-platform",
-      "title": "Multi-API Integration Platform",
-      "year": 2024,
-      "tools": ["Node.js", "Express", "Redis", "GraphQL"],
-      "impact": {
-        "primary": "Unified 8 APIs",
-        "metrics": [
-          "Reduced API calls by 40%",
-          "Improved latency by 55%"
-        ]
-      },
-      "overview": {
-        "problem": "Multiple third-party APIs created complex integration logic scattered across services, causing maintenance nightmares.",
-        "solution": "Created centralized integration platform with caching, rate limiting, and unified GraphQL interface.",
-        "outcome": "Simplified API consumption across all services and dramatically improved performance with intelligent caching."
-      },
-      "flow": "graph TD\n    A[Client Request] --> B[GraphQL Gateway]\n    B --> C{Cache Hit?}\n    C -->|Yes| D[Return Cached]\n    C -->|No| E[Route to API]\n    E --> F[External API]\n    F --> G[Cache Response]\n    G --> H[Return to Client]",
-      "media": []
+        "problem": "Managing 40+ sub-metering projects with no centralized system. Information buried in spreadsheets, duplicated contacts, missed follow-ups.",
+        "solution": "2 years ago, evaluated PM tools and chose Notion for its building blocks approach. Started small with tasks and projects, gradually added meeting notes, contacts, automations, and custom workflows tailored to our unique processes.",
+        "outcome": "From personal productivity tool to company standard. Information readily accessible with one click instead of digging through spreadsheets. Foundation for all subsequent automation projects."
+      }
     }
   ]
 }
