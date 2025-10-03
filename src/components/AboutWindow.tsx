@@ -194,6 +194,44 @@ export const AboutWindow: React.FC<AboutWindowProps> = ({ onOpenWindow }) => {
                   Impact
                 </button>
               </div>
+
+              {/* Fun Features Section */}
+              <div className="mt-6 pt-4 border-t border-gray-400">
+                <p className="text-xs font-bold mb-3" style={{ color: '#000080' }}>
+                  Hidden Features (Go ahead, explore!)
+                </p>
+
+                <div className="space-y-2 text-xs text-gray-700">
+                  <p>
+                    <span
+                      onClick={() => onOpenWindow?.('chat')}
+                      className="underline font-bold hover:text-blue-700 cursor-pointer"
+                      style={{ color: '#000080' }}
+                    >
+                      Chat Assistant
+                    </span>
+                    {' '}- An AI that knows embarrassingly detailed facts about my projects.
+                    Ask it anything... or just say hi.
+                  </p>
+
+                  <p>
+                    <span
+                      onClick={() => onOpenWindow?.('murall')}
+                      className="underline font-bold hover:text-blue-700 cursor-pointer"
+                      style={{ color: '#000080' }}
+                    >
+                      Murall.exe
+                    </span>
+                    {' '}- Feeling artsy? Generate custom AI wallpapers and watch your desktop
+                    transform. Warning: may cause excessive creativity.
+                  </p>
+                </div>
+
+                <p className="text-xs text-gray-600 mt-3 italic">
+                  This whole site is basically a retro Windows playground. Click around,
+                  have fun, and yes - it's supposed to look like Windows XP.
+                </p>
+              </div>
             </div>
 
             {/* Right side - Profile photo */}

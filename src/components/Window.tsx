@@ -161,6 +161,7 @@ export const Window: React.FC<WindowProps> = ({
         borderBottomColor: '#808080',
         boxShadow: 'var(--shadow-window)',
       }}
+      onMouseDown={onFocus}
     >
       {/* Title Bar */}
       <div

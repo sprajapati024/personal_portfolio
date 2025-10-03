@@ -3,16 +3,21 @@ import { BootSequence } from './components/BootSequence';
 import { Desktop } from './components/Desktop';
 import { Window } from './components/Window';
 import { Taskbar } from './components/Taskbar';
-import { PopmeltBadge } from './components/PopmeltBadge';
 import { ContactInfo } from './components/sections/Contact';
 import { ProjectsExplorer } from './components/ProjectsExplorer';
 import { ImpactWindow } from './components/ImpactWindow';
 import { NowWindow } from './components/NowWindow';
 import { AboutWindow } from './components/AboutWindow';
 import { ContactWindow } from './components/ContactWindow';
+import { ChatAssistant } from './components/ChatAssistant';
+import { GreetingPopup } from './components/GreetingPopup';
+import { FloatingChatButton } from './components/FloatingChatButton';
+import { MurallPromptWindow } from './components/MurallPromptWindow';
+import { MurallPreviewWindow } from './components/MurallPreviewWindow';
 import { useWindowManager } from './hooks/useWindowManager';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import type { DesktopIconProps } from './components/DesktopIcon';
+import { generateWallpaper, type MurallError } from './services/murallService';
 
 // Portfolio Data Props Interface
 export interface PortfolioData {
@@ -26,6 +31,15 @@ type AppStage = 'boot' | 'desktop';
 function App() {
   const [stage, setStage] = useState<AppStage>('boot');
   const [selectedIconId, setSelectedIconId] = useState<string | null>(null);
+  const [showGreeting, setShowGreeting] = useState(false);
+  const [chatJustOpened, setChatJustOpened] = useState(false);
+
+  // Murall state
+  const [wallpaperUrl, setWallpaperUrl] = useState<string | null>(null);
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
+  const [revisedPrompt, setRevisedPrompt] = useState<string>('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationError, setGenerationError] = useState<string | null>(null);
 
   const {
     windows,
@@ -41,10 +55,10 @@ function App() {
     {
       id: 'about',
       title: 'About Me.exe',
-      x: 50,
+      x: 150,
       y: 50,
       width: 840,
-      height: 600,
+      height: 700,
       zIndex: 1,
       isMinimized: false,
       isMaximized: false,
@@ -94,6 +108,42 @@ function App() {
       width: 450,
       height: 500,
       zIndex: 6,
+      isMinimized: true,
+      isMaximized: false,
+      visible: true,
+    },
+    {
+      id: 'chat',
+      title: 'Chat Assistant',
+      x: window.innerWidth - 360,
+      y: window.innerHeight - 540,
+      width: 340,
+      height: 450,
+      zIndex: 7,
+      isMinimized: true,
+      isMaximized: false,
+      visible: true,
+    },
+    {
+      id: 'murall-prompt',
+      title: 'Murall.exe — Prompt',
+      x: 100,
+      y: 100,
+      width: 450,
+      height: 650,
+      zIndex: 8,
+      isMinimized: true,
+      isMaximized: false,
+      visible: true,
+    },
+    {
+      id: 'murall-preview',
+      title: 'Murall.exe — Preview',
+      x: 570,
+      y: 100,
+      width: 600,
+      height: 650,
+      zIndex: 9,
       isMinimized: true,
       isMaximized: false,
       visible: true,
@@ -187,6 +237,43 @@ function App() {
         }
       },
     },
+    {
+      id: 'chat',
+      icon: '🤖',
+      label: 'Chat Assistant',
+      isSelected: selectedIconId === 'chat',
+      onClick: (id) => setSelectedIconId(id),
+      onDoubleClick: (id) => {
+        const win = windows.find(w => w.id === id);
+        if (!win?.visible) {
+          reopenWindow(id);
+        } else if (win?.isMinimized) {
+          restoreWindow(id);
+        } else {
+          bringToFront(id);
+        }
+      },
+    },
+    {
+      id: 'murall',
+      icon: '🖼',
+      label: 'Murall.exe',
+      isSelected: selectedIconId === 'murall',
+      onClick: (id) => setSelectedIconId(id),
+      onDoubleClick: () => {
+        // Open both Murall windows simultaneously
+        const promptWin = windows.find(w => w.id === 'murall-prompt');
+        const previewWin = windows.find(w => w.id === 'murall-preview');
+
+        if (!promptWin?.visible) reopenWindow('murall-prompt');
+        else if (promptWin?.isMinimized) restoreWindow('murall-prompt');
+        else bringToFront('murall-prompt');
+
+        if (!previewWin?.visible) reopenWindow('murall-preview');
+        else if (previewWin?.isMinimized) restoreWindow('murall-preview');
+        else bringToFront('murall-preview');
+      },
+    },
   ];
 
   const handleWindowClick = (id: string) => {
@@ -195,6 +282,11 @@ function App() {
       reopenWindow(id);
     } else if (win?.isMinimized) {
       restoreWindow(id);
+      // Trigger animation for chat window
+      if (id === 'chat') {
+        setChatJustOpened(true);
+        setTimeout(() => setChatJustOpened(false), 400);
+      }
     } else {
       bringToFront(id);
     }
@@ -240,6 +332,21 @@ function App() {
   });
 
   const handleOpenWindow = (windowId: string) => {
+    // Handle Murall.exe specially - open both windows
+    if (windowId === 'murall') {
+      const promptWin = windows.find(w => w.id === 'murall-prompt');
+      const previewWin = windows.find(w => w.id === 'murall-preview');
+
+      if (!promptWin?.visible) reopenWindow('murall-prompt');
+      else if (promptWin?.isMinimized) restoreWindow('murall-prompt');
+      else bringToFront('murall-prompt');
+
+      if (!previewWin?.visible) reopenWindow('murall-preview');
+      else if (previewWin?.isMinimized) restoreWindow('murall-preview');
+      else bringToFront('murall-preview');
+      return;
+    }
+
     const win = windows.find(w => w.id === windowId);
     if (!win?.visible) {
       reopenWindow(windowId);
@@ -248,6 +355,36 @@ function App() {
     } else {
       bringToFront(windowId);
     }
+  };
+
+  const handleOpenProject = (_projectSlug: string) => {
+    // Logic to open project detail - for now just open projects explorer
+    handleOpenWindow('projects-explorer');
+  };
+
+  // Murall handlers
+  const handleGenerate = async (prompt: string) => {
+    setIsGenerating(true);
+    setGenerationError(null);
+
+    try {
+      const result = await generateWallpaper({ prompt });
+      setGeneratedImageUrl(result.imageUrl);
+      setRevisedPrompt(result.revisedPrompt || '');
+    } catch (error) {
+      const murallError = error as MurallError;
+      setGenerationError(murallError.message || 'Generation failed. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleSetWallpaper = (imageUrl: string) => {
+    setWallpaperUrl(imageUrl);
+  };
+
+  const handleClearError = () => {
+    setGenerationError(null);
   };
 
   const renderWindowContent = (id: string) => {
@@ -262,6 +399,30 @@ function App() {
         return <NowWindow />;
       case 'contact':
         return <ContactWindow />;
+      case 'chat':
+        return (
+          <ChatAssistant
+            onOpenProject={handleOpenProject}
+            onOpenWindow={handleOpenWindow}
+          />
+        );
+      case 'murall-prompt':
+        return (
+          <MurallPromptWindow
+            onGenerate={handleGenerate}
+            isGenerating={isGenerating}
+          />
+        );
+      case 'murall-preview':
+        return (
+          <MurallPreviewWindow
+            imageUrl={generatedImageUrl}
+            revisedPrompt={revisedPrompt}
+            error={generationError}
+            onSetWallpaper={handleSetWallpaper}
+            onClearError={handleClearError}
+          />
+        );
       default:
         return null;
     }
@@ -269,7 +430,11 @@ function App() {
 
   // Boot sequence
   if (stage === 'boot') {
-    return <BootSequence onComplete={() => setStage('desktop')} />;
+    return <BootSequence onComplete={() => {
+      setStage('desktop');
+      // Show greeting popup 2 seconds after boot
+      setTimeout(() => setShowGreeting(true), 2000);
+    }} />;
   }
 
   // Desktop
@@ -277,28 +442,38 @@ function App() {
     <Desktop
       icons={desktopIcons}
       onDesktopClick={() => setSelectedIconId(null)}
+      wallpaperUrl={wallpaperUrl}
     >
       {windows.map(
         (win) =>
           win.visible && !win.isMinimized && (
-            <Window
+            <div
               key={win.id}
-              title={win.title}
-              x={win.x}
-              y={win.y}
-              width={win.width}
-              height={win.height}
-              isMaximized={win.isMaximized}
-              zIndex={win.zIndex}
-              onFocus={() => bringToFront(win.id)}
-              onClose={() => closeWindow(win.id)}
-              onMinimize={() => minimizeWindow(win.id)}
-              onMaximize={() => handleWindowMaximize(win.id)}
-              onPositionChange={(x, y) => updateWindowPosition(win.id, x, y)}
-              onSizeChange={(width, height) => updateWindowSize(win.id, width, height)}
+              className={win.id === 'chat' && chatJustOpened ? 'chat-window-enter' : ''}
+              style={{
+                animation: win.id === 'chat' && chatJustOpened
+                  ? 'chatPopOut 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  : 'none',
+              }}
             >
-              {renderWindowContent(win.id)}
-            </Window>
+              <Window
+                title={win.title}
+                x={win.x}
+                y={win.y}
+                width={win.width}
+                height={win.height}
+                isMaximized={win.isMaximized}
+                zIndex={win.zIndex}
+                onFocus={() => bringToFront(win.id)}
+                onClose={() => closeWindow(win.id)}
+                onMinimize={() => minimizeWindow(win.id)}
+                onMaximize={() => handleWindowMaximize(win.id)}
+                onPositionChange={(x, y) => updateWindowPosition(win.id, x, y)}
+                onSizeChange={(width, height) => updateWindowSize(win.id, width, height)}
+              >
+                {renderWindowContent(win.id)}
+              </Window>
+            </div>
           )
       )}
       <Taskbar
@@ -313,7 +488,17 @@ function App() {
         onWindowClick={handleWindowClick}
         onStartMenuItemClick={handleWindowClick}
       />
-      <PopmeltBadge />
+
+      {/* Floating Chat Button */}
+      <FloatingChatButton onClick={() => handleOpenWindow('chat')} />
+
+      {/* Greeting Popup */}
+      {showGreeting && (
+        <GreetingPopup
+          onOpenChat={() => handleOpenWindow('chat')}
+          onClose={() => setShowGreeting(false)}
+        />
+      )}
     </Desktop>
   );
 }
