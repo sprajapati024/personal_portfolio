@@ -1,4 +1,3 @@
-import OpenAI from 'openai';
 import projectsData from '../data/projects.json';
 import siteData from '../data/site.json';
 
@@ -13,20 +12,6 @@ interface ChatResponse {
   shouldOpenProject?: string;
   shouldOpenWindow?: string;
 }
-
-// Initialize OpenAI client
-const getOpenAIClient = () => {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-
-  if (!apiKey) {
-    throw new Error('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your .env file.');
-  }
-
-  return new OpenAI({
-    apiKey,
-    dangerouslyAllowBrowser: true // Note: In production, this should go through a backend proxy
-  });
-};
 
 // Build context from data files
 const buildSystemContext = (): string => {
@@ -122,8 +107,6 @@ export const sendChatMessage = async (
   conversationHistory: Message[] = []
 ): Promise<ChatResponse> => {
   try {
-    const client = getOpenAIClient();
-
     // Build messages array
     const messages: Message[] = [
       { role: 'system', content: buildSystemContext() },
@@ -131,16 +114,22 @@ export const sendChatMessage = async (
       { role: 'user', content: userMessage }
     ];
 
-    // Call OpenAI API
-    const completion = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: messages,
-      temperature: 0.7,
-      max_tokens: 300,
+    // Call serverless API
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ messages }),
     });
 
-    const assistantMessage = completion.choices[0]?.message?.content ||
-      "Sorry, I couldn't process that. Can you try rephrasing?";
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(errorData.error || `API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const assistantMessage = data.message || "Sorry, I couldn't process that. Can you try rephrasing?";
 
     return parseResponse(assistantMessage);
   } catch (error) {
@@ -149,7 +138,7 @@ export const sendChatMessage = async (
     if (error instanceof Error) {
       if (error.message.includes('API key')) {
         return {
-          message: "⚠️ OpenAI API key not configured. Please add your API key to the .env file.",
+          message: "⚠️ OpenAI API key not configured on the server.",
         };
       }
       return {

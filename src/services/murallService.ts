@@ -1,5 +1,3 @@
-import OpenAI from 'openai';
-
 // Type definitions
 export interface WallpaperGenerationRequest {
   prompt: string;
@@ -17,50 +15,38 @@ export interface MurallError {
   retryable: boolean;
 }
 
-// Initialize OpenAI client
-const getOpenAIClient = () => {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-
-  if (!apiKey) {
-    throw new Error('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your .env file.');
-  }
-
-  return new OpenAI({
-    apiKey,
-    dangerouslyAllowBrowser: true // Note: In production, this should go through a backend proxy
-  });
-};
-
 // Generate wallpaper using DALL·E 3
 export const generateWallpaper = async (
   request: WallpaperGenerationRequest
 ): Promise<WallpaperGenerationResult> => {
   try {
-    const client = getOpenAIClient();
-
-    // Call OpenAI Images API (DALL·E 3)
-    const response = await client.images.generate({
-      model: 'dall-e-3',
-      prompt: request.prompt,
-      n: 1,
-      size: request.size || '1024x1024',
-      quality: request.quality || 'standard',
-      response_format: 'url',
+    // Call serverless API
+    const response = await fetch('/api/generate-image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: request.prompt,
+        size: request.size || '1024x1024',
+        quality: request.quality || 'standard',
+      }),
     });
 
-    if (!response.data || response.data.length === 0) {
-      throw new Error('No image data returned from API');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(errorData.error || `API error: ${response.status}`);
     }
 
-    const imageData = response.data[0];
+    const data = await response.json();
 
-    if (!imageData?.url) {
+    if (!data.imageUrl) {
       throw new Error('No image URL returned from API');
     }
 
     return {
-      imageUrl: imageData.url,
-      revisedPrompt: imageData.revised_prompt,
+      imageUrl: data.imageUrl,
+      revisedPrompt: data.revisedPrompt,
     };
   } catch (error) {
     console.error('Murall service error:', error);
@@ -68,12 +54,12 @@ export const generateWallpaper = async (
     if (error instanceof Error) {
       if (error.message.includes('API key')) {
         throw {
-          message: 'OpenAI API key not configured. Please add your API key to the .env file.',
+          message: 'OpenAI API key not configured on the server.',
           retryable: false,
         } as MurallError;
       }
 
-      if (error.message.includes('rate limit')) {
+      if (error.message.includes('rate limit') || error.message.includes('429')) {
         throw {
           message: 'Rate limit exceeded. Please try again in a moment.',
           retryable: true,

@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_OPENAI_API_KEY: string;
+  // No client-side environment variables needed
+  // OpenAI API key is now handled server-side
 }
 
 interface ImportMeta {
