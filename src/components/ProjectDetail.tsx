@@ -34,32 +34,33 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
     switch (activeTab) {
       case 'overview':
         return (
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div>
-              <h3 className="font-bold text-sm mb-1">Problem</h3>
-              <p className="text-sm">{project.overview.problem}</p>
+              <h3 className="font-bold text-xs mb-1" style={{ color: '#000080' }}>Problem</h3>
+              <p className="text-xs">{project.overview.problem}</p>
             </div>
             <div>
-              <h3 className="font-bold text-sm mb-1">Solution</h3>
-              <p className="text-sm">{project.overview.solution}</p>
+              <h3 className="font-bold text-xs mb-1" style={{ color: '#000080' }}>Solution</h3>
+              <p className="text-xs">{project.overview.solution}</p>
             </div>
             <div>
-              <h3 className="font-bold text-sm mb-1">Outcome</h3>
-              <p className="text-sm">{project.overview.outcome}</p>
+              <h3 className="font-bold text-xs mb-1" style={{ color: '#000080' }}>Outcome</h3>
+              <p className="text-xs">{project.overview.outcome}</p>
             </div>
           </div>
         );
 
       case 'tools':
         return (
-          <div className="space-y-3">
-            <h3 className="font-bold text-sm">Technologies Used</h3>
+          <div className="space-y-2">
+            <h3 className="font-bold text-xs" style={{ color: '#000080' }}>Technologies Used</h3>
             <div className="flex flex-wrap gap-2">
               {project.tools.map((tool) => (
                 <div
                   key={tool}
-                  className="px-3 py-2 border-2 bg-white"
+                  className="px-2 py-1 border-2"
                   style={{
+                    backgroundColor: '#ece9d8',
                     borderTopColor: '#ffffff',
                     borderLeftColor: '#ffffff',
                     borderRightColor: '#808080',
@@ -67,7 +68,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
                   }}
                   title={`Technology: ${tool}`}
                 >
-                  <span className="text-sm font-semibold">{tool}</span>
+                  <span className="text-xs font-semibold">{tool}</span>
                 </div>
               ))}
             </div>
@@ -76,18 +77,31 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
 
       case 'impact':
         return (
-          <div className="space-y-4">
-            <div className="p-3 bg-blue-50 border-2 border-blue-300">
-              <h3 className="font-bold text-sm mb-1 text-blue-800">Primary Impact</h3>
-              <p className="text-lg font-bold text-blue-900">{project.impact.primary}</p>
+          <div className="space-y-3">
+            <div className="p-3 border-2" style={{
+              backgroundColor: '#ece9d8',
+              borderTopColor: '#ffffff',
+              borderLeftColor: '#ffffff',
+              borderRightColor: '#808080',
+              borderBottomColor: '#808080',
+            }}>
+              <h3 className="font-bold text-xs mb-1" style={{ color: '#000080' }}>Primary Impact</h3>
+              <p className="text-sm font-bold" style={{ color: '#000080' }}>{project.impact.primary}</p>
             </div>
             <div>
-              <h3 className="font-bold text-sm mb-2">Key Metrics</h3>
+              <h3 className="font-bold text-xs mb-2">Key Metrics</h3>
               <div className="space-y-2">
                 {project.impact.metrics.map((metric, index) => (
                   <div
                     key={index}
-                    className="p-2 bg-gray-100 border border-gray-300 text-sm"
+                    className="p-2 border-2 text-xs"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderTopColor: '#ffffff',
+                      borderLeftColor: '#ffffff',
+                      borderRightColor: '#808080',
+                      borderBottomColor: '#808080',
+                    }}
                   >
                     • {metric}
                   </div>
@@ -143,10 +157,12 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
   };
 
   return (
-    <div className="flex flex-col h-full" style={{ fontFamily: 'var(--font-tahoma)' }}>
+    <div className="flex flex-col h-full bg-white p-3" style={{ fontFamily: 'var(--font-tahoma)' }}>
       {/* Project title header */}
-      <div className="border-b-2 border-gray-400 pb-2 mb-3">
-        <h2 className="text-lg font-bold">{project.title}</h2>
+      <div className="pb-2 mb-3" style={{
+        borderBottom: '2px solid #0054e3',
+      }}>
+        <h2 className="text-base font-bold" style={{ color: '#000080' }}>{project.title}</h2>
         <p className="text-xs text-gray-600">Year: {project.year}</p>
       </div>
 

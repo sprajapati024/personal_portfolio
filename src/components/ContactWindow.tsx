@@ -37,15 +37,17 @@ export const ContactWindow: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full" style={{ fontFamily: 'var(--font-tahoma)' }}>
+    <div className="flex flex-col h-full bg-white p-3" style={{ fontFamily: 'var(--font-tahoma)' }}>
       {/* Header */}
-      <div className="border-b-2 border-gray-400 pb-3 mb-4">
-        <h2 className="text-xl font-bold">Get in Touch</h2>
+      <div className="pb-2 mb-3" style={{
+        borderBottom: '2px solid #0054e3',
+      }}>
+        <h2 className="text-base font-bold" style={{ color: '#000080' }}>Get in Touch</h2>
         <p className="text-xs text-gray-600 mt-1">{siteData.contact.subtext}</p>
       </div>
 
       {/* Contact Methods */}
-      <div className="flex-1 space-y-3">
+      <div className="flex-1 space-y-2">
         {contactMethods.map((method) => (
           <a
             key={method.label}
@@ -53,9 +55,9 @@ export const ContactWindow: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => handleContactClick(method.label.toLowerCase())}
-            className="block p-4 border-2 hover:bg-blue-50 transition-colors"
+            className="block p-3 border-2 transition-colors"
             style={{
-              background: '#ffffff',
+              backgroundColor: '#ece9d8',
               borderTopColor: '#ffffff',
               borderLeftColor: '#ffffff',
               borderRightColor: '#808080',
@@ -63,21 +65,29 @@ export const ContactWindow: React.FC = () => {
               textDecoration: 'none',
               color: '#000000',
             }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#e5f3ff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#ece9d8';
+            }}
           >
             <div className="flex items-center gap-3">
-              <div className="text-3xl">{method.icon}</div>
+              <div className="text-2xl">{method.icon}</div>
               <div className="flex-1">
-                <div className="font-bold text-sm mb-0.5">{method.label}</div>
+                <div className="font-bold text-sm mb-0.5" style={{ color: '#000080' }}>{method.label}</div>
                 <div className="text-xs text-gray-600">{method.value}</div>
               </div>
-              <div className="text-gray-400">→</div>
+              <div className="text-gray-500">→</div>
             </div>
           </a>
         ))}
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-400 mt-4 pt-3 text-xs text-gray-600 text-center">
+      <div className="mt-3 pt-2 text-xs text-gray-600 text-center" style={{
+        borderTop: '1px solid #808080',
+      }}>
         I typically respond within 24-48 hours
       </div>
     </div>
