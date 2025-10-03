@@ -11,6 +11,11 @@ export interface WindowState {
   isMinimized: boolean;
   isMaximized: boolean;
   visible: boolean;
+  // Store original dimensions for restore
+  originalX?: number;
+  originalY?: number;
+  originalWidth?: number;
+  originalHeight?: number;
 }
 
 export interface UseWindowManagerResult {
@@ -62,7 +67,20 @@ export const useWindowManager = (
       setWindows((prev) =>
         prev.map((w) =>
           w.id === id
-            ? { ...w, visible: true, isMinimized: false, zIndex: newZIndex }
+            ? {
+                ...w,
+                visible: true,
+                isMinimized: false,
+                isMaximized: false,
+                zIndex: newZIndex,
+                // Restore original dimensions if window was maximized
+                ...(w.isMaximized && w.originalWidth ? {
+                  x: w.originalX!,
+                  y: w.originalY!,
+                  width: w.originalWidth,
+                  height: w.originalHeight!,
+                } : {})
+              }
             : w
         )
       );
@@ -83,6 +101,11 @@ export const useWindowManager = (
           ? {
               ...w,
               isMaximized: true,
+              // Store original dimensions before maximizing
+              originalX: w.x,
+              originalY: w.y,
+              originalWidth: w.width,
+              originalHeight: w.height,
               x: 0,
               y: 0,
               width: window.innerWidth,
@@ -101,6 +124,13 @@ export const useWindowManager = (
               ...w,
               isMinimized: false,
               isMaximized: false,
+              // Restore original dimensions if they exist
+              ...(w.originalWidth ? {
+                x: w.originalX!,
+                y: w.originalY!,
+                width: w.originalWidth,
+                height: w.originalHeight!,
+              } : {})
             }
           : w
       )
