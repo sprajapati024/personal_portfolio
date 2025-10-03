@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { loadSiteData } from '../data/dataLoader';
-import { analytics } from '../utils/analytics';
 
 interface AboutWindowProps {
   onOpenWindow?: (windowId: string) => void;

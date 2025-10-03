@@ -5,7 +5,6 @@ import {
   Zap,
   Server,
   FileText,
-  Calendar,
   GitBranch,
   Clock,
   Settings,
