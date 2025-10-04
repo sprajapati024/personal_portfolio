@@ -15,12 +15,6 @@ interface TimelineEvent {
 const Timeline: React.FC = () => {
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [narration, setNarration] = useState<string>('');
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState<string>('');
-  const [isNarrating, setIsNarrating] = useState(false);
-  const [isQuerying, setIsQuerying] = useState(false);
-  const [showAskDialog, setShowAskDialog] = useState(false);
 
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
@@ -37,79 +31,16 @@ const Timeline: React.FC = () => {
 
   const goToPrevious = useCallback(() => {
     setCurrentIndex(prev => Math.max(0, prev - 1));
-    setNarration('');
-    setAnswer('');
   }, []);
 
   const goToNext = useCallback(() => {
     setCurrentIndex(prev => Math.min(events.length - 1, prev + 1));
-    setNarration('');
-    setAnswer('');
   }, [events.length]);
 
   const jumpToEvent = (index: number) => {
     setCurrentIndex(index);
-    setNarration('');
-    setAnswer('');
     if (events[index]) {
       analytics.trackTimelineJump(events[index].id);
-    }
-  };
-
-  const handleNarrate = async () => {
-    if (!events[currentIndex] || isNarrating) return;
-
-    setIsNarrating(true);
-    setNarration('');
-
-    analytics.trackTimelineNarrate(events[currentIndex].id);
-
-    try {
-      const response = await fetch('/api/timeline/narrate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event: events[currentIndex] })
-      });
-
-      const data = await response.json();
-      setNarration(data.text);
-    } catch (error) {
-      console.error('Narration failed:', error);
-      setNarration('Unable to generate narration at this time.');
-    } finally {
-      setIsNarrating(false);
-    }
-  };
-
-  const handleAsk = async () => {
-    if (!question.trim() || isQuerying) return;
-
-    setIsQuerying(true);
-    setAnswer('');
-
-    analytics.trackTimelineQuery(question);
-
-    try {
-      const response = await fetch('/api/timeline/query', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, events })
-      });
-
-      const data = await response.json();
-      setAnswer(data.text);
-
-      if (data.jump_to_id) {
-        const targetIndex = events.findIndex(e => e.id === data.jump_to_id);
-        if (targetIndex !== -1) {
-          setTimeout(() => jumpToEvent(targetIndex), 1000);
-        }
-      }
-    } catch (error) {
-      console.error('Query failed:', error);
-      setAnswer('Unable to process your question at this time.');
-    } finally {
-      setIsQuerying(false);
     }
   };
 

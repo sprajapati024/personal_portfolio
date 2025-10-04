@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styles from './FloatingChatButton.module.css';
 
 interface FloatingChatButtonProps {
@@ -6,13 +5,9 @@ interface FloatingChatButtonProps {
 }
 
 export const FloatingChatButton: React.FC<FloatingChatButtonProps> = ({ onClick }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className={styles.floatingButton}
       aria-label="Open Chat Assistant"
     >
