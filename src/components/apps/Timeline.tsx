@@ -117,20 +117,6 @@ const Timeline: React.FC = () => {
               <span key={tag} className={styles.tag}>#{tag}</span>
             ))}
           </div>
-
-          {narration && (
-            <div className={styles.narration}>
-              <strong>AI Narration:</strong>
-              <p>{narration}</p>
-            </div>
-          )}
-
-          {answer && (
-            <div className={styles.answer}>
-              <strong>AI Answer:</strong>
-              <p>{answer}</p>
-            </div>
-          )}
         </div>
 
         <div className={styles.controls}>
