@@ -14,6 +14,7 @@ import { GreetingPopup } from './components/GreetingPopup';
 import { FloatingChatButton } from './components/FloatingChatButton';
 import { MurallPromptWindow } from './components/MurallPromptWindow';
 import { MurallPreviewWindow } from './components/MurallPreviewWindow';
+import Timeline from './components/apps/Timeline';
 import { useWindowManager } from './hooks/useWindowManager';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import type { DesktopIconProps } from './components/DesktopIcon';
@@ -126,7 +127,7 @@ function App() {
     },
     {
       id: 'murall-prompt',
-      title: 'Murall.exe — Prompt',
+      title: 'Murall — Prompt',
       x: 100,
       y: 100,
       width: 450,
@@ -138,12 +139,24 @@ function App() {
     },
     {
       id: 'murall-preview',
-      title: 'Murall.exe — Preview',
+      title: 'Murall — Preview',
       x: 570,
       y: 100,
       width: 600,
       height: 650,
       zIndex: 9,
+      isMinimized: true,
+      isMaximized: false,
+      visible: true,
+    },
+    {
+      id: 'timeline',
+      title: 'Timeline',
+      x: 120,
+      y: 80,
+      width: 700,
+      height: 550,
+      zIndex: 10,
       isMinimized: true,
       isMaximized: false,
       visible: true,
@@ -257,7 +270,7 @@ function App() {
     {
       id: 'murall',
       icon: '🖼',
-      label: 'Murall.exe',
+      label: 'Murall',
       isSelected: selectedIconId === 'murall',
       onClick: (id) => setSelectedIconId(id),
       onDoubleClick: () => {
@@ -272,6 +285,23 @@ function App() {
         if (!previewWin?.visible) reopenWindow('murall-preview');
         else if (previewWin?.isMinimized) restoreWindow('murall-preview');
         else bringToFront('murall-preview');
+      },
+    },
+    {
+      id: 'timeline',
+      icon: '📅',
+      label: 'Timeline',
+      isSelected: selectedIconId === 'timeline',
+      onClick: (id) => setSelectedIconId(id),
+      onDoubleClick: (id) => {
+        const win = windows.find(w => w.id === id);
+        if (!win?.visible) {
+          reopenWindow(id);
+        } else if (win?.isMinimized) {
+          restoreWindow(id);
+        } else {
+          bringToFront(id);
+        }
       },
     },
   ];
@@ -423,6 +453,8 @@ function App() {
             onClearError={handleClearError}
           />
         );
+      case 'timeline':
+        return <Timeline />;
       default:
         return null;
     }

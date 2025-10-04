@@ -8,7 +8,11 @@ export type AnalyticsEvent =
   | { event: 'contact_click'; channel: string }
   | { event: 'resume_click' }
   | { event: 'window_opened'; windowId: string }
-  | { event: 'window_closed'; windowId: string };
+  | { event: 'window_closed'; windowId: string }
+  | { event: 'timeline_open' }
+  | { event: 'timeline_jump'; eventId: string }
+  | { event: 'timeline_narrate'; eventId: string }
+  | { event: 'timeline_query'; question: string };
 
 class Analytics {
   /**
@@ -89,6 +93,34 @@ class Analytics {
    */
   trackWindowClosed(windowId: string): void {
     this.track({ event: 'window_closed', windowId });
+  }
+
+  /**
+   * Track timeline opened
+   */
+  trackTimelineOpen(): void {
+    this.track({ event: 'timeline_open' });
+  }
+
+  /**
+   * Track timeline jump to event
+   */
+  trackTimelineJump(eventId: string): void {
+    this.track({ event: 'timeline_jump', eventId });
+  }
+
+  /**
+   * Track timeline narration
+   */
+  trackTimelineNarrate(eventId: string): void {
+    this.track({ event: 'timeline_narrate', eventId });
+  }
+
+  /**
+   * Track timeline query
+   */
+  trackTimelineQuery(question: string): void {
+    this.track({ event: 'timeline_query', question });
   }
 }
 

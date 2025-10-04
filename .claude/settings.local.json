@@ -3,7 +3,11 @@
     "allow": [
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfix: resolve TypeScript timeout type error in DesktopIcon\n\nChange clickTimer type from number to ReturnType<typeof setTimeout> to fix build error on Vercel.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

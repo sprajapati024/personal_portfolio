@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { DesktopIcon, DesktopIconProps } from './DesktopIcon';
+import { WeatherWidget } from './WeatherWidget';
 
 interface DesktopProps {
   children: ReactNode;
@@ -51,6 +52,9 @@ export const Desktop: React.FC<DesktopProps> = ({
           />
         ))}
       </div>
+
+      {/* Weather Widget */}
+      <WeatherWidget />
 
       {/* Windows Container */}
       {children}
